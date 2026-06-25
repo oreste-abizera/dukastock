@@ -1,0 +1,1 @@
+# Migration scripts go here. Run 'alembic revision --autogenerate -m "message"' to create one.
