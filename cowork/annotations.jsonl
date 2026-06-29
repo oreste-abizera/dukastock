@@ -1,0 +1,200 @@
+{"text": "Do you have 1 box of oil?", "entities": [{"start": 21, "end": 24, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 17, "label": "UNIT"}]}
+{"text": "inyama icumi ipande byagurishijwe", "entities": [{"start": 0, "end": 6, "label": "PRODUCT"}, {"start": 7, "end": 12, "label": "QUANTITY"}, {"start": 13, "end": 19, "label": "UNIT"}]}
+{"text": "Naragurishije umuceri icumi ibiro", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "QUANTITY"}, {"start": 28, "end": 33, "label": "UNIT"}]}
+{"text": "Received 20 bag of tea", "entities": [{"start": 19, "end": 22, "label": "PRODUCT"}, {"start": 9, "end": 11, "label": "QUANTITY"}, {"start": 12, "end": 15, "label": "UNIT"}]}
+{"text": "Nabagurishije isabune ibiro ebyiri ku 2000 Frw", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 34, "label": "QUANTITY"}]}
+{"text": "Nabagurishije soap litre eshatu", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 24, "label": "UNIT"}, {"start": 25, "end": 31, "label": "QUANTITY"}]}
+{"text": "Nabagurishije oil ibiro esheshatu", "entities": [{"start": 14, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 23, "label": "UNIT"}, {"start": 24, "end": 33, "label": "QUANTITY"}]}
+{"text": "Nifuza inzoga indobo eshanu", "entities": [{"start": 7, "end": 13, "label": "PRODUCT"}, {"start": 14, "end": 20, "label": "UNIT"}, {"start": 21, "end": 27, "label": "QUANTITY"}]}
+{"text": "I sold amavuta enye bottle", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 26, "label": "UNIT"}]}
+{"text": "Received 1 bar of oil", "entities": [{"start": 18, "end": 21, "label": "PRODUCT"}, {"start": 9, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 14, "label": "UNIT"}]}
+{"text": "Naragurishije imiteja kabiri ipande", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 28, "label": "QUANTITY"}, {"start": 29, "end": 35, "label": "UNIT"}]}
+{"text": "Do you have 6 liters of salt?", "entities": [{"start": 24, "end": 28, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 20, "label": "UNIT"}]}
+{"text": "Sold two liters of tea today", "entities": [{"start": 19, "end": 22, "label": "PRODUCT"}, {"start": 5, "end": 8, "label": "QUANTITY"}, {"start": 9, "end": 15, "label": "UNIT"}]}
+{"text": "Today I sold seven box of flour", "entities": [{"start": 26, "end": 31, "label": "PRODUCT"}, {"start": 13, "end": 18, "label": "QUANTITY"}, {"start": 19, "end": 22, "label": "UNIT"}]}
+{"text": "Do you have 10 bar of meat?", "entities": [{"start": 22, "end": 26, "label": "PRODUCT"}, {"start": 12, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 18, "label": "UNIT"}]}
+{"text": "Sold ibitoki 4 ifurishi", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 23, "label": "UNIT"}]}
+{"text": "Nabagurishije maize litro eshanu", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 32, "label": "QUANTITY"}]}
+{"text": "At Nyamirambo market I sold 15 sack of rice", "entities": [{"start": 39, "end": 43, "label": "PRODUCT"}, {"start": 28, "end": 30, "label": "QUANTITY"}, {"start": 31, "end": 35, "label": "UNIT"}]}
+{"text": "Do you have 3 box of beans?", "entities": [{"start": 21, "end": 26, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 17, "label": "UNIT"}]}
+{"text": "I need twelve bag of amata", "entities": [{"start": 21, "end": 26, "label": "PRODUCT"}, {"start": 7, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 17, "label": "UNIT"}]}
+{"text": "amata enye ibiro byagurishijwe", "entities": [{"start": 0, "end": 5, "label": "PRODUCT"}, {"start": 6, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 16, "label": "UNIT"}]}
+{"text": "Nabagurishije ibitoki birindwi", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 30, "label": "QUANTITY"}]}
+{"text": "I sold ikawa icyenda box", "entities": [{"start": 7, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 20, "label": "QUANTITY"}, {"start": 21, "end": 24, "label": "UNIT"}]}
+{"text": "Nifuza isukari indobo 25", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 21, "label": "UNIT"}, {"start": 22, "end": 24, "label": "QUANTITY"}]}
+{"text": "Do you have 2 box of beer?", "entities": [{"start": 21, "end": 25, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 17, "label": "UNIT"}]}
+{"text": "Naragurishije isukari 20 box", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "ifu enye bar", "entities": [{"start": 0, "end": 3, "label": "PRODUCT"}, {"start": 4, "end": 8, "label": "QUANTITY"}, {"start": 9, "end": 12, "label": "UNIT"}]}
+{"text": "ifu icumi sack", "entities": [{"start": 0, "end": 3, "label": "PRODUCT"}, {"start": 4, "end": 9, "label": "QUANTITY"}, {"start": 10, "end": 14, "label": "UNIT"}]}
+{"text": "I sold imiteja bine kg", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 22, "label": "UNIT"}]}
+{"text": "At Kimironko market I sold 20 sack of oil", "entities": [{"start": 38, "end": 41, "label": "PRODUCT"}, {"start": 27, "end": 29, "label": "QUANTITY"}, {"start": 30, "end": 34, "label": "UNIT"}]}
+{"text": "amata imwe liters", "entities": [{"start": 0, "end": 5, "label": "PRODUCT"}, {"start": 6, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 17, "label": "UNIT"}]}
+{"text": "Sold 4 bar of maize for 2000 RWF", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}, {"start": 7, "end": 10, "label": "UNIT"}]}
+{"text": "Still have 10 sack of icyayi remaining", "entities": [{"start": 22, "end": 28, "label": "PRODUCT"}, {"start": 11, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 18, "label": "UNIT"}]}
+{"text": "Sold one bar of oil today", "entities": [{"start": 16, "end": 19, "label": "PRODUCT"}, {"start": 5, "end": 8, "label": "QUANTITY"}, {"start": 9, "end": 12, "label": "UNIT"}]}
+{"text": "Nabagurishije amavuta ibiro eshanu", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 34, "label": "QUANTITY"}]}
+{"text": "Nabagurishije imiteja agasanduku imwe", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 32, "label": "UNIT"}, {"start": 33, "end": 37, "label": "QUANTITY"}]}
+{"text": "Naragurishije umuceri 20 sack", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 29, "label": "UNIT"}]}
+{"text": "Naragurishije ibitoki 2 kilo", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 28, "label": "UNIT"}]}
+{"text": "I sold ibigori enye kg", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 22, "label": "UNIT"}]}
+{"text": "Do you have 1 bag of oil?", "entities": [{"start": 21, "end": 24, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 17, "label": "UNIT"}]}
+{"text": "Muri uyu munsi nabagurishije imiteja litre 3 kuri abakiriya benshi", "entities": [{"start": 29, "end": 36, "label": "PRODUCT"}, {"start": 37, "end": 42, "label": "UNIT"}, {"start": 43, "end": 44, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ifu litre 2", "entities": [{"start": 14, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 23, "label": "UNIT"}, {"start": 24, "end": 25, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ibitoki agasanduku 15", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 32, "label": "UNIT"}, {"start": 33, "end": 35, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Kimironko nabagurishije amavuta ifurishi 8", "entities": [{"start": 38, "end": 45, "label": "PRODUCT"}, {"start": 46, "end": 54, "label": "UNIT"}, {"start": 55, "end": 56, "label": "QUANTITY"}]}
+{"text": "Naragurishije umuceri 1 liters", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 30, "label": "UNIT"}]}
+{"text": "I sold isabune eshatu sack", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 21, "label": "QUANTITY"}, {"start": 22, "end": 26, "label": "UNIT"}]}
+{"text": "Nakiriye inyama agasanduku 3", "entities": [{"start": 9, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 26, "label": "UNIT"}, {"start": 27, "end": 28, "label": "QUANTITY"}]}
+{"text": "Sold 1 kg of soap today", "entities": [{"start": 13, "end": 17, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}, {"start": 7, "end": 9, "label": "UNIT"}]}
+{"text": "Nabagurishije isukari agasanduku icyenda", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 32, "label": "UNIT"}, {"start": 33, "end": 40, "label": "QUANTITY"}]}
+{"text": "Nabagurishije isukari enye", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 26, "label": "QUANTITY"}]}
+{"text": "amavuta indobo byagurishijwe", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 14, "label": "UNIT"}]}
+{"text": "I sold amavuta icumi bar", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 20, "label": "QUANTITY"}, {"start": 21, "end": 24, "label": "UNIT"}]}
+{"text": "Nabagurishije ikawa indobo icyenda", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 26, "label": "UNIT"}, {"start": 27, "end": 34, "label": "QUANTITY"}]}
+{"text": "Nabagurishije tomatoes litro ebyiri", "entities": [{"start": 14, "end": 22, "label": "PRODUCT"}, {"start": 23, "end": 28, "label": "UNIT"}, {"start": 29, "end": 35, "label": "QUANTITY"}]}
+{"text": "Nabagurishije rice litro imwe", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 24, "label": "UNIT"}, {"start": 25, "end": 29, "label": "QUANTITY"}]}
+{"text": "Do you have 8 bottle of soap?", "entities": [{"start": 24, "end": 28, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 20, "label": "UNIT"}]}
+{"text": "Naragurishije isukari icumi ibilo", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "QUANTITY"}, {"start": 28, "end": 33, "label": "UNIT"}]}
+{"text": "Sold three bottle of milk today", "entities": [{"start": 21, "end": 25, "label": "PRODUCT"}, {"start": 5, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 17, "label": "UNIT"}]}
+{"text": "Today I sold three sack of beer", "entities": [{"start": 27, "end": 31, "label": "PRODUCT"}, {"start": 13, "end": 18, "label": "QUANTITY"}, {"start": 19, "end": 23, "label": "UNIT"}]}
+{"text": "Received 12 kg of soap", "entities": [{"start": 18, "end": 22, "label": "PRODUCT"}, {"start": 9, "end": 11, "label": "QUANTITY"}, {"start": 12, "end": 14, "label": "UNIT"}]}
+{"text": "Muri isoko ya Nyamirambo nabagurishije icyayi litre ebyiri", "entities": [{"start": 39, "end": 45, "label": "PRODUCT"}, {"start": 46, "end": 51, "label": "UNIT"}, {"start": 52, "end": 58, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Remera nabagurishije isabune litre imwe", "entities": [{"start": 35, "end": 42, "label": "PRODUCT"}, {"start": 43, "end": 48, "label": "UNIT"}, {"start": 49, "end": 53, "label": "QUANTITY"}]}
+{"text": "Do you have 5 sack of salt?", "entities": [{"start": 22, "end": 26, "label": "PRODUCT"}, {"start": 12, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 18, "label": "UNIT"}]}
+{"text": "Nifuza isukari box 25", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 18, "label": "UNIT"}, {"start": 19, "end": 21, "label": "QUANTITY"}]}
+{"text": "icyayi ebyiri ipande byagurishijwe", "entities": [{"start": 0, "end": 6, "label": "PRODUCT"}, {"start": 7, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 20, "label": "UNIT"}]}
+{"text": "Nabagurishije amata ibiro 20", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 28, "label": "QUANTITY"}]}
+{"text": "Nabagurishije amata 12", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 22, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Remera nabagurishije ibigori litro eshanu", "entities": [{"start": 35, "end": 42, "label": "PRODUCT"}, {"start": 43, "end": 48, "label": "UNIT"}, {"start": 49, "end": 55, "label": "QUANTITY"}]}
+{"text": "I sold umuceri imwe kilo", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 24, "label": "UNIT"}]}
+{"text": "Muri isoko ya Gisozi nabagurishije ikawa litre eshanu", "entities": [{"start": 35, "end": 40, "label": "PRODUCT"}, {"start": 41, "end": 46, "label": "UNIT"}, {"start": 47, "end": 53, "label": "QUANTITY"}]}
+{"text": "Nabagurishije isukari litro 7", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 29, "label": "QUANTITY"}]}
+{"text": "Muri uyu munsi nabagurishije icyayi ifurishi eshatu kuri abakiriya benshi", "entities": [{"start": 29, "end": 35, "label": "PRODUCT"}, {"start": 36, "end": 44, "label": "UNIT"}, {"start": 45, "end": 51, "label": "QUANTITY"}]}
+{"text": "Nakiriye amavuta ibiro bine", "entities": [{"start": 9, "end": 16, "label": "PRODUCT"}, {"start": 17, "end": 22, "label": "UNIT"}, {"start": 23, "end": 27, "label": "QUANTITY"}]}
+{"text": "This morning at the market I sold 8 bottle of tomatoes to customers", "entities": [{"start": 46, "end": 54, "label": "PRODUCT"}, {"start": 34, "end": 35, "label": "QUANTITY"}, {"start": 36, "end": 42, "label": "UNIT"}]}
+{"text": "Muri uyu munsi nabagurishije imiteja ibiro 6 kuri abakiriya benshi", "entities": [{"start": 29, "end": 36, "label": "PRODUCT"}, {"start": 37, "end": 42, "label": "UNIT"}, {"start": 43, "end": 44, "label": "QUANTITY"}]}
+{"text": "Sold 2 salt today", "entities": [{"start": 7, "end": 11, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}]}
+{"text": "isabune 15 kg", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 13, "label": "UNIT"}]}
+{"text": "Today I sold one kilo of flour", "entities": [{"start": 25, "end": 30, "label": "PRODUCT"}, {"start": 13, "end": 16, "label": "QUANTITY"}, {"start": 17, "end": 21, "label": "UNIT"}]}
+{"text": "Nabagurishije meat ifurishi icumi", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 27, "label": "UNIT"}, {"start": 28, "end": 33, "label": "QUANTITY"}]}
+{"text": "Nabagurishije amavuta na ikawa ebyiri ipande", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 25, "end": 30, "label": "PRODUCT"}, {"start": 31, "end": 37, "label": "QUANTITY"}, {"start": 38, "end": 44, "label": "UNIT"}]}
+{"text": "This morning at the market I sold 15 bar of milk to customers", "entities": [{"start": 44, "end": 48, "label": "PRODUCT"}, {"start": 34, "end": 36, "label": "QUANTITY"}, {"start": 37, "end": 40, "label": "UNIT"}]}
+{"text": "Nabagurishije icyayi agasanduku enye", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 31, "label": "UNIT"}, {"start": 32, "end": 36, "label": "QUANTITY"}]}
+{"text": "inyama 15 ipande byagurishijwe", "entities": [{"start": 0, "end": 6, "label": "PRODUCT"}, {"start": 7, "end": 9, "label": "QUANTITY"}, {"start": 10, "end": 16, "label": "UNIT"}]}
+{"text": "Nakiriye isabune litre 15", "entities": [{"start": 9, "end": 16, "label": "PRODUCT"}, {"start": 17, "end": 22, "label": "UNIT"}, {"start": 23, "end": 25, "label": "QUANTITY"}]}
+{"text": "I need seven kg of ifu", "entities": [{"start": 19, "end": 22, "label": "PRODUCT"}, {"start": 7, "end": 12, "label": "QUANTITY"}, {"start": 13, "end": 15, "label": "UNIT"}]}
+{"text": "Sold eight sack of maize today", "entities": [{"start": 19, "end": 24, "label": "PRODUCT"}, {"start": 5, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 15, "label": "UNIT"}]}
+{"text": "Sold three kilo of milk today", "entities": [{"start": 19, "end": 23, "label": "PRODUCT"}, {"start": 5, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 15, "label": "UNIT"}]}
+{"text": "Hasigaye icyayi ibiro imwe gusa", "entities": [{"start": 9, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 21, "label": "UNIT"}, {"start": 22, "end": 26, "label": "QUANTITY"}]}
+{"text": "Nabagurishije rice ifurishi rimwe", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 27, "label": "UNIT"}, {"start": 28, "end": 33, "label": "QUANTITY"}]}
+{"text": "Nabagurishije umuceri agasanduku kabiri", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 32, "label": "UNIT"}, {"start": 33, "end": 39, "label": "QUANTITY"}]}
+{"text": "Naragurishije ibigori 12 bar", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "I sold ibishyimbo bitatu kg", "entities": [{"start": 7, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 27, "label": "UNIT"}]}
+{"text": "Nifuza ibitoki bar 1", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 18, "label": "UNIT"}, {"start": 19, "end": 20, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Remera nabagurishije imiteja litre 25", "entities": [{"start": 35, "end": 42, "label": "PRODUCT"}, {"start": 43, "end": 48, "label": "UNIT"}, {"start": 49, "end": 51, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ikawa agasanduku 10", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 30, "label": "UNIT"}, {"start": 31, "end": 33, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ifu ipande 25", "entities": [{"start": 14, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 24, "label": "UNIT"}, {"start": 25, "end": 27, "label": "QUANTITY"}]}
+{"text": "Today I sold ten sack of salt", "entities": [{"start": 25, "end": 29, "label": "PRODUCT"}, {"start": 13, "end": 16, "label": "QUANTITY"}, {"start": 17, "end": 21, "label": "UNIT"}]}
+{"text": "Sold 2 beans today", "entities": [{"start": 7, "end": 12, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}]}
+{"text": "Received 4 box of soap", "entities": [{"start": 18, "end": 22, "label": "PRODUCT"}, {"start": 9, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 14, "label": "UNIT"}]}
+{"text": "Muri isoko ya Kimironko nabagurishije ifu ipande kabiri", "entities": [{"start": 38, "end": 41, "label": "PRODUCT"}, {"start": 42, "end": 48, "label": "UNIT"}, {"start": 49, "end": 55, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ibigori ipande 4", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 28, "label": "UNIT"}, {"start": 29, "end": 30, "label": "QUANTITY"}]}
+{"text": "Sold ibigori 25 agasanduku", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 15, "label": "QUANTITY"}, {"start": 16, "end": 26, "label": "UNIT"}]}
+{"text": "Nabagurishije imiteja agasanduku rimwe", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 32, "label": "UNIT"}, {"start": 33, "end": 38, "label": "QUANTITY"}]}
+{"text": "I sold isabune enye bag", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 23, "label": "UNIT"}]}
+{"text": "I need 8 bar of amata", "entities": [{"start": 16, "end": 21, "label": "PRODUCT"}, {"start": 7, "end": 8, "label": "QUANTITY"}, {"start": 9, "end": 12, "label": "UNIT"}]}
+{"text": "Naragurishije isukari 15 bag", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "Sold ibishyimbo 12 gasanduku", "entities": [{"start": 5, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 18, "label": "QUANTITY"}, {"start": 19, "end": 28, "label": "UNIT"}]}
+{"text": "I sold ikawa rimwe kilo", "entities": [{"start": 7, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 18, "label": "QUANTITY"}, {"start": 19, "end": 23, "label": "UNIT"}]}
+{"text": "imiteja bitanu ipande byagurishijwe", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 21, "label": "UNIT"}]}
+{"text": "Naragurishije inzoga 7 box", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 22, "label": "QUANTITY"}, {"start": 23, "end": 26, "label": "UNIT"}]}
+{"text": "Sold ibigori 2 ipande", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 21, "label": "UNIT"}]}
+{"text": "Muri isoko ya Kimironko nabagurishije inzoga ibiro eshatu", "entities": [{"start": 38, "end": 44, "label": "PRODUCT"}, {"start": 45, "end": 50, "label": "UNIT"}, {"start": 51, "end": 57, "label": "QUANTITY"}]}
+{"text": "Nabagurishije umuceri ibiro bine", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 32, "label": "QUANTITY"}]}
+{"text": "ibishyimbo umunani indobo byagurishijwe", "entities": [{"start": 0, "end": 10, "label": "PRODUCT"}, {"start": 11, "end": 18, "label": "QUANTITY"}, {"start": 19, "end": 25, "label": "UNIT"}]}
+{"text": "I sold ifu ebyiri kilo", "entities": [{"start": 7, "end": 10, "label": "PRODUCT"}, {"start": 11, "end": 17, "label": "QUANTITY"}, {"start": 18, "end": 22, "label": "UNIT"}]}
+{"text": "Nabagurishije isabune eshanu", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 28, "label": "QUANTITY"}]}
+{"text": "Nabagurishije coffee indobo birindwi", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 27, "label": "UNIT"}, {"start": 28, "end": 36, "label": "QUANTITY"}]}
+{"text": "I sold inyama icumi bar", "entities": [{"start": 7, "end": 13, "label": "PRODUCT"}, {"start": 14, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 23, "label": "UNIT"}]}
+{"text": "isabune eshatu litro", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 20, "label": "UNIT"}]}
+{"text": "Hasigaye inzoga indobo 50 gusa", "entities": [{"start": 9, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 22, "label": "UNIT"}, {"start": 23, "end": 25, "label": "QUANTITY"}]}
+{"text": "Naragurishije amavuta 6 sack", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 28, "label": "UNIT"}]}
+{"text": "Nabagurishije ifu indobo 25", "entities": [{"start": 14, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 24, "label": "UNIT"}, {"start": 25, "end": 27, "label": "QUANTITY"}]}
+{"text": "Sold bananas and beans 8 bag today", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 17, "end": 22, "label": "PRODUCT"}, {"start": 23, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "Nabagurishije isabune litre bitanu ku 2000 Frw", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 34, "label": "QUANTITY"}]}
+{"text": "Today I sold twelve bag of bananas", "entities": [{"start": 27, "end": 34, "label": "PRODUCT"}, {"start": 13, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 23, "label": "UNIT"}]}
+{"text": "Nabagurishije imiteja na ibishyimbo 6 litro", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 25, "end": 35, "label": "PRODUCT"}, {"start": 36, "end": 37, "label": "QUANTITY"}, {"start": 38, "end": 43, "label": "UNIT"}]}
+{"text": "Nakiriye isabune agasanduku bine", "entities": [{"start": 9, "end": 16, "label": "PRODUCT"}, {"start": 17, "end": 27, "label": "UNIT"}, {"start": 28, "end": 32, "label": "QUANTITY"}]}
+{"text": "Nasabye ibigori indobo 8", "entities": [{"start": 8, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 22, "label": "UNIT"}, {"start": 23, "end": 24, "label": "QUANTITY"}]}
+{"text": "Muri uyu munsi nabagurishije isukari litre bitanu kuri abakiriya benshi", "entities": [{"start": 29, "end": 36, "label": "PRODUCT"}, {"start": 37, "end": 42, "label": "UNIT"}, {"start": 43, "end": 49, "label": "QUANTITY"}]}
+{"text": "Hasigaye ikawa agasanduku 20 gusa", "entities": [{"start": 9, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 25, "label": "UNIT"}, {"start": 26, "end": 28, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Nyamirambo nabagurishije inzoga litro kabiri", "entities": [{"start": 39, "end": 45, "label": "PRODUCT"}, {"start": 46, "end": 51, "label": "UNIT"}, {"start": 52, "end": 58, "label": "QUANTITY"}]}
+{"text": "Nasabye umuceri litre 5", "entities": [{"start": 8, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 21, "label": "UNIT"}, {"start": 22, "end": 23, "label": "QUANTITY"}]}
+{"text": "Nasabye ikawa kilo 4", "entities": [{"start": 8, "end": 13, "label": "PRODUCT"}, {"start": 14, "end": 18, "label": "UNIT"}, {"start": 19, "end": 20, "label": "QUANTITY"}]}
+{"text": "I sold ifu ebyiri liters", "entities": [{"start": 7, "end": 10, "label": "PRODUCT"}, {"start": 11, "end": 17, "label": "QUANTITY"}, {"start": 18, "end": 24, "label": "UNIT"}]}
+{"text": "Nabagurishije amata litre eshatu", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 32, "label": "QUANTITY"}]}
+{"text": "Naragurishije amavuta 12 box", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "Nabagurishije inzoga ibiro 50", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 26, "label": "UNIT"}, {"start": 27, "end": 29, "label": "QUANTITY"}]}
+{"text": "Naragurishije amavuta 7 sack", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 28, "label": "UNIT"}]}
+{"text": "Ufite icyayi litre 2?", "entities": [{"start": 6, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 18, "label": "UNIT"}, {"start": 19, "end": 20, "label": "QUANTITY"}]}
+{"text": "Today I sold twelve bar of oil", "entities": [{"start": 27, "end": 30, "label": "PRODUCT"}, {"start": 13, "end": 19, "label": "QUANTITY"}, {"start": 20, "end": 23, "label": "UNIT"}]}
+{"text": "I sold ibishyimbo bitanu bag", "entities": [{"start": 7, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 28, "label": "UNIT"}]}
+{"text": "Ufite isukari indobo imwe?", "entities": [{"start": 6, "end": 13, "label": "PRODUCT"}, {"start": 14, "end": 20, "label": "UNIT"}, {"start": 21, "end": 25, "label": "QUANTITY"}]}
+{"text": "Sold 3 bar of soap today", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}, {"start": 7, "end": 10, "label": "UNIT"}]}
+{"text": "Naragurishije ifu umunani indobo", "entities": [{"start": 14, "end": 17, "label": "PRODUCT"}, {"start": 18, "end": 25, "label": "QUANTITY"}, {"start": 26, "end": 32, "label": "UNIT"}]}
+{"text": "Nabagurishije sugar litre bitanu", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 32, "label": "QUANTITY"}]}
+{"text": "Nakiriye imiteja indobo 25", "entities": [{"start": 9, "end": 16, "label": "PRODUCT"}, {"start": 17, "end": 23, "label": "UNIT"}, {"start": 24, "end": 26, "label": "QUANTITY"}]}
+{"text": "Muri uyu munsi nabagurishije icyayi ifurishi 2 kuri abakiriya benshi", "entities": [{"start": 29, "end": 35, "label": "PRODUCT"}, {"start": 36, "end": 44, "label": "UNIT"}, {"start": 45, "end": 46, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Remera nabagurishije icyayi litro rimwe", "entities": [{"start": 35, "end": 41, "label": "PRODUCT"}, {"start": 42, "end": 47, "label": "UNIT"}, {"start": 48, "end": 53, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ibitoki 8", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 23, "label": "QUANTITY"}]}
+{"text": "ibishyimbo 5 agasanduku byagurishijwe", "entities": [{"start": 0, "end": 10, "label": "PRODUCT"}, {"start": 11, "end": 12, "label": "QUANTITY"}, {"start": 13, "end": 23, "label": "UNIT"}]}
+{"text": "Nabagurishije amavuta ipande 12", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 28, "label": "UNIT"}, {"start": 29, "end": 31, "label": "QUANTITY"}]}
+{"text": "Today I sold 4 kg of sugar", "entities": [{"start": 21, "end": 26, "label": "PRODUCT"}, {"start": 13, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 17, "label": "UNIT"}]}
+{"text": "Still have 1 liters of imiteja remaining", "entities": [{"start": 23, "end": 30, "label": "PRODUCT"}, {"start": 11, "end": 12, "label": "QUANTITY"}, {"start": 13, "end": 19, "label": "UNIT"}]}
+{"text": "Hasigaye ibishyimbo litre 15 gusa", "entities": [{"start": 9, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 28, "label": "QUANTITY"}]}
+{"text": "This morning at the market I sold 2 sack of beans to customers", "entities": [{"start": 44, "end": 49, "label": "PRODUCT"}, {"start": 34, "end": 35, "label": "QUANTITY"}, {"start": 36, "end": 40, "label": "UNIT"}]}
+{"text": "Nabagurishije beer indobo bitatu", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 25, "label": "UNIT"}, {"start": 26, "end": 32, "label": "QUANTITY"}]}
+{"text": "Nabagurishije maize indobo imwe", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 26, "label": "UNIT"}, {"start": 27, "end": 31, "label": "QUANTITY"}]}
+{"text": "I sold imiteja rimwe sack", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 20, "label": "QUANTITY"}, {"start": 21, "end": 25, "label": "UNIT"}]}
+{"text": "Today I sold 25 bag of beer", "entities": [{"start": 23, "end": 27, "label": "PRODUCT"}, {"start": 13, "end": 15, "label": "QUANTITY"}, {"start": 16, "end": 19, "label": "UNIT"}]}
+{"text": "Sold isukari 10 ipande", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 15, "label": "QUANTITY"}, {"start": 16, "end": 22, "label": "UNIT"}]}
+{"text": "Sold twelve sack of milk today", "entities": [{"start": 20, "end": 24, "label": "PRODUCT"}, {"start": 5, "end": 11, "label": "QUANTITY"}, {"start": 12, "end": 16, "label": "UNIT"}]}
+{"text": "isukari eshanu sack", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 19, "label": "UNIT"}]}
+{"text": "Naragurishije mavuta 15 bar", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 27, "label": "UNIT"}]}
+{"text": "Nabagurishije milk ibiro kabiri", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 19, "end": 24, "label": "UNIT"}, {"start": 25, "end": 31, "label": "QUANTITY"}]}
+{"text": "Sold 8 kilo of salt today", "entities": [{"start": 15, "end": 19, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}, {"start": 7, "end": 11, "label": "UNIT"}]}
+{"text": "Nabagurishije ibishyimbo 10", "entities": [{"start": 14, "end": 24, "label": "PRODUCT"}, {"start": 25, "end": 27, "label": "QUANTITY"}]}
+{"text": "Received 7 sack of soap", "entities": [{"start": 19, "end": 23, "label": "PRODUCT"}, {"start": 9, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 15, "label": "UNIT"}]}
+{"text": "Today I sold 7 bar of beans", "entities": [{"start": 22, "end": 27, "label": "PRODUCT"}, {"start": 13, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 18, "label": "UNIT"}]}
+{"text": "Nabagurishije inyama na imiteja 6 ifurishi", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 24, "end": 31, "label": "PRODUCT"}, {"start": 32, "end": 33, "label": "QUANTITY"}, {"start": 34, "end": 42, "label": "UNIT"}]}
+{"text": "Sold isukari 5 ifurishi", "entities": [{"start": 5, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 14, "label": "QUANTITY"}, {"start": 15, "end": 23, "label": "UNIT"}]}
+{"text": "Hasigaye ibishyimbo ipande 6 gusa", "entities": [{"start": 9, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 26, "label": "UNIT"}, {"start": 27, "end": 28, "label": "QUANTITY"}]}
+{"text": "Muri isoko ya Kicukiro nabagurishije ibigori litro icumi", "entities": [{"start": 37, "end": 44, "label": "PRODUCT"}, {"start": 45, "end": 50, "label": "UNIT"}, {"start": 51, "end": 56, "label": "QUANTITY"}]}
+{"text": "I sold umuceri birindwi kg", "entities": [{"start": 7, "end": 14, "label": "PRODUCT"}, {"start": 15, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 26, "label": "UNIT"}]}
+{"text": "Naragurishije inyama 7 bag", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 22, "label": "QUANTITY"}, {"start": 23, "end": 26, "label": "UNIT"}]}
+{"text": "Muri uyu munsi nabagurishije imiteja litre bitatu kuri abakiriya benshi", "entities": [{"start": 29, "end": 36, "label": "PRODUCT"}, {"start": 37, "end": 42, "label": "UNIT"}, {"start": 43, "end": 49, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ikawa na amavuta 2 agasanduku", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 23, "end": 30, "label": "PRODUCT"}, {"start": 31, "end": 32, "label": "QUANTITY"}, {"start": 33, "end": 43, "label": "UNIT"}]}
+{"text": "Nabagurishije inyama ifurishi bitatu", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 29, "label": "UNIT"}, {"start": 30, "end": 36, "label": "QUANTITY"}]}
+{"text": "Naragurishije ibishyimbo bitanu litro", "entities": [{"start": 14, "end": 24, "label": "PRODUCT"}, {"start": 25, "end": 31, "label": "QUANTITY"}, {"start": 32, "end": 37, "label": "UNIT"}]}
+{"text": "I sold icyayi esheshatu bag", "entities": [{"start": 7, "end": 13, "label": "PRODUCT"}, {"start": 14, "end": 23, "label": "QUANTITY"}, {"start": 24, "end": 27, "label": "UNIT"}]}
+{"text": "Ufite inyama ipande icumi?", "entities": [{"start": 6, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 19, "label": "UNIT"}, {"start": 20, "end": 25, "label": "QUANTITY"}]}
+{"text": "Nabagurishije umuceri litro ebyiri", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 27, "label": "UNIT"}, {"start": 28, "end": 34, "label": "QUANTITY"}]}
+{"text": "Naragurishije ibigori eshatu indobo", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 28, "label": "QUANTITY"}, {"start": 29, "end": 35, "label": "UNIT"}]}
+{"text": "Naragurishije ibishyimbo bitanu ibilo", "entities": [{"start": 14, "end": 24, "label": "PRODUCT"}, {"start": 25, "end": 31, "label": "QUANTITY"}, {"start": 32, "end": 37, "label": "UNIT"}]}
+{"text": "Muri uyu munsi nabagurishije isukari litro icyenda kuri abakiriya benshi", "entities": [{"start": 29, "end": 36, "label": "PRODUCT"}, {"start": 37, "end": 42, "label": "UNIT"}, {"start": 43, "end": 50, "label": "QUANTITY"}]}
+{"text": "Nabagurishije ikawa litre 2", "entities": [{"start": 14, "end": 19, "label": "PRODUCT"}, {"start": 20, "end": 25, "label": "UNIT"}, {"start": 26, "end": 27, "label": "QUANTITY"}]}
+{"text": "Sold 7 bar of salt for 3000 RWF", "entities": [{"start": 14, "end": 18, "label": "PRODUCT"}, {"start": 5, "end": 6, "label": "QUANTITY"}, {"start": 7, "end": 10, "label": "UNIT"}]}
+{"text": "umuceri 8 litro byagurishijwe", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 9, "label": "QUANTITY"}, {"start": 10, "end": 15, "label": "UNIT"}]}
+{"text": "Muri uyu munsi nabagurishije ibishyimbo indobo umunani kuri abakiriya benshi", "entities": [{"start": 29, "end": 39, "label": "PRODUCT"}, {"start": 40, "end": 46, "label": "UNIT"}, {"start": 47, "end": 54, "label": "QUANTITY"}]}
+{"text": "Nabagurishije coffee litro birindwi", "entities": [{"start": 14, "end": 20, "label": "PRODUCT"}, {"start": 21, "end": 26, "label": "UNIT"}, {"start": 27, "end": 35, "label": "QUANTITY"}]}
+{"text": "Nakiriye isabune litro 50", "entities": [{"start": 9, "end": 16, "label": "PRODUCT"}, {"start": 17, "end": 22, "label": "UNIT"}, {"start": 23, "end": 25, "label": "QUANTITY"}]}
+{"text": "Naragurishije amavuta 12 bottle", "entities": [{"start": 14, "end": 21, "label": "PRODUCT"}, {"start": 22, "end": 24, "label": "QUANTITY"}, {"start": 25, "end": 31, "label": "UNIT"}]}
+{"text": "Nakiriye sabune ifurishi 1", "entities": [{"start": 9, "end": 15, "label": "PRODUCT"}, {"start": 16, "end": 24, "label": "UNIT"}, {"start": 25, "end": 26, "label": "QUANTITY"}]}
+{"text": "At Kimironko market I sold 12 sack of tomatoes", "entities": [{"start": 38, "end": 46, "label": "PRODUCT"}, {"start": 27, "end": 29, "label": "QUANTITY"}, {"start": 30, "end": 34, "label": "UNIT"}]}
+{"text": "Sold 25 bananas today", "entities": [{"start": 8, "end": 15, "label": "PRODUCT"}, {"start": 5, "end": 7, "label": "QUANTITY"}]}
+{"text": "Sold four bar of coffee today", "entities": [{"start": 17, "end": 23, "label": "PRODUCT"}, {"start": 5, "end": 9, "label": "QUANTITY"}, {"start": 10, "end": 13, "label": "UNIT"}]}
+{"text": "Still have 15 liters of ibitoki remaining", "entities": [{"start": 24, "end": 31, "label": "PRODUCT"}, {"start": 11, "end": 13, "label": "QUANTITY"}, {"start": 14, "end": 20, "label": "UNIT"}]}
+{"text": "Ufite icyayi ifurishi 20?", "entities": [{"start": 6, "end": 12, "label": "PRODUCT"}, {"start": 13, "end": 21, "label": "UNIT"}, {"start": 22, "end": 24, "label": "QUANTITY"}]}
+{"text": "amavuta 20 ipande byagurishijwe", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 17, "label": "UNIT"}]}
+{"text": "ibitoki 10 agasanduku byagurishijwe", "entities": [{"start": 0, "end": 7, "label": "PRODUCT"}, {"start": 8, "end": 10, "label": "QUANTITY"}, {"start": 11, "end": 21, "label": "UNIT"}]}
+{"text": "Sold ifu 50 ipande", "entities": [{"start": 5, "end": 8, "label": "PRODUCT"}, {"start": 9, "end": 11, "label": "QUANTITY"}, {"start": 12, "end": 18, "label": "UNIT"}]}
