@@ -1,0 +1,159 @@
+# Research Design
+
+Mirrors proposal Chapter 3.2 ("Research Design") and Chapter 1.4 ("Research
+Questions"). This document exists so the experimental protocol is
+discoverable directly from the codebase, not only from the Word document.
+
+## Primary research question
+
+Across SARIMA, Prophet, XGBoost, and N-BEATS, at what minimum data density
+does each model class first achieve statistically significant improvement
+over a naive last-week-sales baseline (p < 0.05, Diebold-Mariano test with
+Newey-West HAC variance correction for h = 7), evaluated at the individual
+store (single-Duka proxy) level, when trained under simulated cold-start
+conditions on a Rwanda-localized formal retail benchmark dataset?
+
+## Secondary research question
+
+How accurately does a fine-tuned XLM-R model extract product names and
+quantities from informal English-Kinyarwanda code-switched commerce
+messages compared to a rule-based RapidFuzz baseline, measured by
+precision, recall, and F1 on a 200-message annotated test set with
+reported Cohen's Kappa?
+
+## Tertiary research question
+
+What usability patterns emerge from System Usability Scale scores when
+Duka operators interact with the WhatsApp and USSD prototype channels?
+
+## Why temporal cold-start, not random masking
+
+Bergmeir & Benitez (2012) established that standard k-fold cross-validation
+is invalid for time series because it lets information from the future
+leak into training. Suradhaniwar et al. (2021) extended this finding
+specifically to SARIMA and ML demand models. DukaStock's six density
+levels (5/15/30/50/75/100%) are therefore **temporal prefixes** of the
+chronological series, not randomly sampled subsets — `temporal_density_slice`
+in `app/ml/pipeline/cold_start.py` always takes the *first* N% of dates,
+because that is what "a Duka that started recording sales recently" 
+actually looks like.
+
+## Why walk-forward validation, not a single train/test split
+
+A single split would only test one moment in time. Walk-forward validation
+(`walk_forward_folds`) re-trains on an expanding window and tests on the
+next 7 days, repeated at least 6 times per density level, so the threshold
+density finding is robust to which particular week happened to be the test
+week.
+
+## Why the Diebold-Mariano test, not just comparing RMSE numbers
+
+Two models can have different RMSE purely by chance, especially on short,
+sparse cold-start series. The DM test (Diebold & Mariano, 1995) asks
+whether the *difference* in loss is large enough, relative to its own
+variance across folds, to rule out chance. This is what makes "minimum
+data density" a defensible empirical finding rather than an eyeballed
+number from a chart.
+
+## Why these five model classes specifically
+
+| Model | Role | Why included |
+|---|---|---|
+| Naive (last-week-sales) | H0 / performance floor | Always available with zero training; what every Duka owner does mentally already |
+| SARIMA | Classical statistical baseline | Falatouri et al. (2022): competitive on short series with clear seasonal structure |
+| Facebook Prophet | Calendar-aware decomposable baseline | Accepts the Rwanda holiday calendar directly; Taylor & Letham (2018) |
+| XGBoost + Rwanda features | Primary ML candidate | Fatima & Salam (2025) and arXiv:2506.05941 found tree ensembles strongest under sparse intermittent demand — the exact regime of a cold-start Duka |
+| N-BEATS | Lightweight neural baseline | Oreshkin et al. (2020): +11% over the M4 statistical benchmark with zero feature engineering, useful as a check on whether hand-engineered Rwanda features are even necessary |
+
+## Why these five products
+
+Sugar (isukari), cooking oil (amavuta yo guteka), flour (ifu), rice
+(umuceri), and soap (isabune) were chosen as Rwandan FMCG staples with
+genuine demand variability. Airtime was explicitly excluded in the
+proposal scope because its demand is near-constant and offers no
+forecasting challenge — there would be nothing for any model, including
+the naive baseline, to get wrong.
+
+## Reproducibility
+
+All code, configurations, and evaluation scripts are designed to run
+identically whether invoked from `ml_experiments/scripts/run_experiment.py`
+(headless, CI-friendly) or from the notebooks in `ml_experiments/notebooks/`
+(exploratory, fully visualized) — both call into the same `app.ml.*`
+modules in `backend/`.
+
+## Honest limitations — disclosed in thesis methods section
+
+### Dataset is a proxy, not real Rwandan retail data
+
+The benchmark dataset is the **Kaggle Store Item Demand Forecasting
+Challenge** (10 anonymous stores, 50 anonymous items, 2013-2017). This
+dataset was chosen because no publicly available time-series dataset of
+informal Rwandan Duka sales exists (see `docs/SOURCES.md`). It is used as a
+structural proxy to test whether cold-start density affects model accuracy
+under weekly-seasonal demand. All Rwanda-specific features (holiday calendar,
+Genocide Memorial Day suppressor, rainy-season intensity, FMCG product naming)
+are **fully implemented and designed for deployment** on real Duka sales data
+but cannot be empirically validated on this proxy dataset.
+
+Downstream claims made in this thesis are restricted to:
+- "Under a proxy dataset structurally similar to weekly FMCG retail demand..."
+- "The Rwanda localisation layer is production-ready for real Duka data..."
+- NOT: "Memorial Day reduces sales by X%" or "Rain increases demand by Y%"
+  — these claims cannot be substantiated and are not made.
+
+### Per-store evaluation rationale
+
+Evaluation is performed at the individual store (Duka-proxy) level, not as
+a 10-store national aggregate. Rationale: DukaStock is deployed to individual
+shopkeepers. Aggregating 10 stores into one national series inflates lag-7
+autocorrelation from r = 0.55-0.80 (per-store) to r = 0.94 (national),
+leaving only 12% of variance for any model to explain and making
+Diebold-Mariano significance nearly unachievable regardless of model quality.
+The per-store evaluation gives a fair test that matches the actual deployment
+unit. Each of the 10 Kaggle stores serves as an independent Duka proxy;
+metrics are averaged across stores and reported with standard deviations.
+
+### DM test statistical power disclosure
+
+At 6 walk-forward folds per (store, density) combination with n = 7 test
+observations per fold (total n = 42 loss-differential observations), the
+DM test has limited statistical power. Effect sizes need to be practically
+large to achieve p < 0.05. This is disclosed explicitly in the results
+section: "Failure to achieve statistical significance at low density levels
+is expected given n ≤ 42 loss-differential observations per DM test — it
+reflects limited power, not model equivalence."
+
+### XGBoost product-feature mapping is arbitrary on this dataset
+
+The mapping {item_1: SUGAR, item_7: OIL, item_13: FLOUR, item_24: RICE,
+item_35: SOAP} is implemented for deployment readiness. The Kaggle dataset
+items are anonymous; the mapping cannot be verified empirically.
+
+## Documented deviations from the written proposal
+
+Two implementation choices depart from a literal reading of proposal
+Chapter 3.3 ("Machine Learning Training Pipeline"). Both are deliberate,
+reasoned decisions made during implementation, not oversights — flagged
+here so they can be explicitly addressed (defended, or the code changed to
+match) before final submission.
+
+1. **Prophet does not use lag-1/2/4 week features as regressors.** The
+   proposal's pipeline description groups lag features under "XGBoost and
+   Prophet." Prophet's own weekly_seasonality term already captures the
+   same 7-day periodicity a lag_1 regressor would encode, so this codebase
+   gives Prophet only its holiday-calendar contrast (the property that
+   actually differentiates it from XGBoost in Table 5) and leaves lag
+   features to XGBoost specifically. See the module docstring in
+   `backend/app/ml/models/prophet_model.py` for the full reasoning and for
+   how to add lag regressors back in if a literal reading is required.
+
+2. **Rwanda's holiday count is implemented as 14, not the 12 stated in
+   the proposal text.** Independent verification (see `docs/SOURCES.md`)
+   found 14 official categories of public holiday. The written proposal
+   document (Chapter 3.3, "Rwanda's official 12 public holidays") should
+   be corrected to match the code, or the code should be deliberately
+   reverted to 12 if there's a specific reason to match the original
+   figure (e.g. a cited source the supervisor prefers) — this has not been
+   done automatically in either direction, since it changes a stated fact
+   in the proposal text itself.
