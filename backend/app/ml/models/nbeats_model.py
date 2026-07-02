@@ -9,10 +9,13 @@ proposal Table 7 (Development Tools).
 """
 from __future__ import annotations
 
+import gc
+
 import numpy as np
 import pandas as pd
 
 try:
+    import torch
     from neuralforecast import NeuralForecast
     from neuralforecast.models import NBEATS
     _NEURALFORECAST_AVAILABLE = True
@@ -66,5 +69,19 @@ class NBEATSModel:
         if self.nf is None:
             return np.full(self.horizon, self._fallback_mean)
         forecast = self.nf.predict()
-        preds = forecast["NBEATS"].values[: self.horizon]
-        return np.clip(preds, a_min=0, a_max=None)
+        preds = np.clip(forecast["NBEATS"].values[: self.horizon], a_min=0, a_max=None)
+        self._release_gpu_memory()
+        return preds
+
+    def _release_gpu_memory(self) -> None:
+        """A fresh NeuralForecast/Trainer is created on every single fold
+        across the benchmark's walk-forward loop (up to ~1800 across the
+        full experiment matrix). Without explicitly releasing it, GPU
+        memory accumulates across those repeated fits within one run --
+        observed on a Kaggle T4: per-fold fit time grew from ~17s to ~65s
+        over 30 folds before this was added, trending toward either an
+        impractically slow full run or a CUDA out-of-memory crash."""
+        self.nf = None
+        if _NEURALFORECAST_AVAILABLE and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        gc.collect()
