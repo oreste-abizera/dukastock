@@ -50,7 +50,14 @@ class NBEATSModel:
             "ds": pd.to_datetime(dates).values,
             "y": y.values,
         })
-        model = NBEATS(h=self.horizon, input_size=input_size, max_steps=self.max_steps)
+        # devices=1: without an explicit device count, PyTorch Lightning
+        # auto-detects every visible GPU and, on a multi-GPU machine,
+        # defaults to a distributed strategy that spawns worker
+        # subprocesses. Spawning fails outright once CUDA is already
+        # initialized in the parent process ("Lightning can't create new
+        # processes if CUDA is already initialized") -- irrelevant for a
+        # model this size anyway, so pin it to a single device.
+        model = NBEATS(h=self.horizon, input_size=input_size, max_steps=self.max_steps, devices=1)
         self.nf = NeuralForecast(models=[model], freq="D")
         self.nf.fit(df=df)
         return self
