@@ -60,7 +60,20 @@ class NBEATSModel:
         # initialized in the parent process ("Lightning can't create new
         # processes if CUDA is already initialized") -- irrelevant for a
         # model this size anyway, so pin it to a single device.
-        model = NBEATS(h=self.horizon, input_size=input_size, max_steps=self.max_steps, devices=1)
+        #
+        # logger=False, enable_checkpointing=False: Lightning's default
+        # CSVLogger creates a new lightning_logs/version_N/ directory per
+        # Trainer, and determines the next version number by scanning the
+        # entire existing directory -- an operation that gets slower every
+        # time as that directory grows. Across the ~1800 NBEATS fits in the
+        # full experiment matrix this compounds into a severe, monotonic
+        # slowdown (measured: ~19s/fold -> ~87s/fold within one run).
+        # Nothing downstream reads Lightning's logs or checkpoints, so both
+        # are disabled outright rather than merely rotated/cleaned up.
+        model = NBEATS(
+            h=self.horizon, input_size=input_size, max_steps=self.max_steps,
+            devices=1, logger=False, enable_checkpointing=False,
+        )
         self.nf = NeuralForecast(models=[model], freq="D")
         self.nf.fit(df=df)
         return self
