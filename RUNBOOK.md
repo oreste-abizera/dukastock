@@ -34,7 +34,7 @@ Talking account), that is stated explicitly rather than implied.
 
 ```bash
 unzip DukaStock_Capstone_Project.zip
-cd dukastock
+cd DukaStock_Capstone_Project   # or whatever the extracted/cloned folder is named locally
 ```
 
 (Or `git clone` if you've pushed this to a repository instead of working
@@ -633,7 +633,7 @@ the Africa's Talking sandbox."
 
 ---
 
-## 12. Submission-readiness checklist (as of last audit, 2026-06-30)
+## 12. Submission-readiness checklist (as of last audit, 2026-07-01)
 
 | Item | Status | Action needed |
 |---|---|---|
@@ -644,15 +644,28 @@ the Africa's Talking sandbox."
 | N-BEATS max_steps=500 (GPU) for convergence | **Done** | None |
 | Reproducibility seed (42) in all experiment entry points | **Done** | None |
 | All four model classes implemented | **Done** | None |
-| ML benchmark experiment results (threshold curve) | **MISSING** | Re-run Notebook 2 on Kaggle/Colab GPU (~10-14h) |
+| Threshold-density rule (`>=50% folds significant`) as pipeline output | **Done** | `run_experiment.py` now writes `threshold_density.csv` directly (previously only in Notebook 2, not the headless script) |
+| Model-fit failures logged, not silently swallowed | **Done** | `run_experiment.py` logs which model/fold/reason on every fallback-to-naive |
+| Best-model artifact selection respects DM significance | **Done** | Previously picked lowest RMSE even if not significantly better than naive |
+| cmdstan (Prophet's Stan backend) | **BROKEN on this Mac** | `install_cmdstan` fails: this machine's `/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` is missing/mismatched vs. the active Xcode toolchain (`xcrun` can't locate it) — a local toolchain issue, not a code bug. Doesn't block Kaggle/Colab runs (Linux). To fix locally: reinstall Command Line Tools (`sudo rm -rf /Library/Developer/CommandLineTools && xcode-select --install`), or just don't run Notebook 2 locally |
+| ML benchmark experiment results (threshold curve) | **MISSING** | Re-run Notebook 2 on Kaggle/Colab GPU (~10-14h) — now resumable/checkpointed, see Notebook 2 Cells 11a-11f |
 | Serialized model artifacts (`.joblib` per product) | **MISSING** | Produced automatically by `run_experiment.py` |
-| 200-message annotated NER test set (real data) | **MISSING** | Human annotation required — see Section 6 |
+| 200-message annotated NER test set (real data) | **MISSING** | Human annotation required — see Section 6. The synthetic placeholder (`cowork/annotations_SYNTHETIC_placeholder.jsonl`, renamed from `annotations.jsonl` and re-documented today to prevent it being mistaken for real data) is not a substitute |
 | Cohen's Kappa from real second annotator | **MISSING** | Follows from annotation |
 | XLM-R fine-tuning on real annotations | **MISSING** | Run after annotations complete (Notebook 3 / train_xlmr_ner.py) |
+| NISR EICV7 cross-validation of the FMCG product subset | **MISSING** | Proposal Objective 1 promises this; nothing in the repo compares the 5-item Kaggle subset against real EICV7 consumption shares. `RESEARCH_DESIGN.md` already discloses the mapping is unverified — either do the comparison or soften the proposal's "cross-validated" language before defense |
 | Three-channel prototype (WhatsApp / USSD / SMS) | **Done** | None |
-| Privacy: phone number hashing (Law 058/2021) | **Done** | None |
+| Privacy: phone number hashing (Law 058/2021) | **Done** | Also fixed today: `POST /sales` used to take `phone_number` as a query param (landing in access logs pre-hash) — now a JSON body field |
+| Alembic migrations | **Done** | Was completely broken (`script.py.mako` template missing, zero migrations ever generated) — `alembic upgrade head` had never created the production schema even once. Fixed and verified against a real Postgres container today |
+| `NLPParseResult` table | **Done** | Was schema-only dead code (defined, never written to, no FK to shopkeeper). Now has a `shopkeeper_id` FK and the WhatsApp handler logs every parse attempt (success or failure) |
+| `USSDSession` Postgres table | **Done** | Was dead code — all session state lived only in Redis, contradicting the architecture's "Supabase stores USSD session data" claim. Now write-through persisted alongside Redis |
+| docker-compose Postgres parity | **Done** | Previously hardcoded SQLite, so the Postgres/Supabase path was never exercised locally. Added a real `postgres` service + alembic-on-boot; verified live (containers up, migration ran, a real API call round-tripped through hashing to a Postgres row) |
+| API-level test coverage | **Done** | Was zero — all 73 tests were unit-level with mocked dependencies, no `TestClient` anywhere. Added 7 tests hitting the real HTTP layer (webhooks, `/sales`, `/forecast`, full USSD flow) |
+| Consent form (English + Kinyarwanda) | **Done** | Did not exist despite being a budgeted line item and required for the SUS field session. Drafted today at `docs/CONSENT_FORM.md` — **fill in the actual compensation amount before printing**, and note the Kinyarwanda translation hasn't been formally back-translated/validated (same caveat as the SUS questionnaire's own translation) |
 | SUS demonstration session (≥3 Duka operators) | **MISSING** | Field session required |
-| Unit test suite | **Done** | None |
+| CI actually gates on lint | **Done** | `ruff check` ran with `--exit-zero` (could never fail the build) — fixed after confirming the one real lint violation was a false positive (canonical Easter-algorithm variable name) |
+| "CI/CD" claim accuracy | **Done** | Was CI-only (no deploy step) documented as if deploy were automated. Added a real `railway.json` build/deploy config and corrected the docs/diagram wording to say deploy is a manual dashboard step |
+| Unit test suite | **Done** | 80 tests passing (was 73; +7 API-level) |
 | NER model path auto-detection | **Done** | None |
 | USSD webhook accepts AT's `serviceCode`/`networkCode` | **Done** | None |
 | ForecastService `no_model` status signal | **Done** | None |

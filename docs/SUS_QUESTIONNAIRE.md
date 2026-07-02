@@ -8,7 +8,7 @@ WhatsApp and/or USSD prototype — not from memory days later.
 
 ## Standard SUS wording (English) — do not alter
 
-The System Usability Scale (Brooke, 1986) is a validated 10-item
+The System Usability Scale (Brooke, 1996) is a validated 10-item
 instrument. Per standard SUS administration guidance, the wording below
 must not be changed and the question order must not be altered, or the
 result is no longer comparable to the published benchmark norms (average

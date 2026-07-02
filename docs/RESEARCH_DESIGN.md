@@ -134,19 +134,31 @@ items are anonymous; the mapping cannot be verified empirically.
 
 Two implementation choices depart from a literal reading of proposal
 Chapter 3.3 ("Machine Learning Training Pipeline"). Both are deliberate,
-reasoned decisions made during implementation, not oversights — flagged
-here so they can be explicitly addressed (defended, or the code changed to
-match) before final submission.
+reasoned decisions made during implementation, not oversights.
 
-1. **Prophet does not use lag-1/2/4 week features as regressors.** The
-   proposal's pipeline description groups lag features under "XGBoost and
-   Prophet." Prophet's own weekly_seasonality term already captures the
-   same 7-day periodicity a lag_1 regressor would encode, so this codebase
-   gives Prophet only its holiday-calendar contrast (the property that
-   actually differentiates it from XGBoost in Table 5) and leaves lag
-   features to XGBoost specifically. See the module docstring in
-   `backend/app/ml/models/prophet_model.py` for the full reasoning and for
-   how to add lag regressors back in if a literal reading is required.
+1. **Decided: Prophet does not use lag-1/2/4 week features as regressors.**
+   The proposal's pipeline description groups lag features under "XGBoost
+   and Prophet." This has been evaluated and the decision is final —
+   lag features stay XGBoost-only. Reasoning, for the thesis methodology
+   section (Chapter 3.3):
+
+   > Prophet's own `weekly_seasonality` term already models the same
+   > 7-day periodicity that a `lag_7d` regressor would encode. Supplying
+   > it anyway would not give the model new information — it would let
+   > Prophet re-derive, via an external regressor, a signal already
+   > present in its seasonal decomposition, inflating its apparent fit
+   > without testing anything additional. This would weaken rather than
+   > strengthen the four-model comparison. Prophet's differentiating
+   > property in this study (Table 5) is calendar-awareness — the
+   > Rwanda public holiday and Genocide Memorial Day suppressor
+   > injected via its holidays parameter — which is implemented in
+   > full. Lag features are therefore scoped to XGBoost only, the model
+   > class for which they are proposed as a primary strength.
+
+   Drop that paragraph into Chapter 3.3 directly, adjusting only for
+   voice/tense to match the rest of the chapter. See the module docstring
+   in `backend/app/ml/models/prophet_model.py` for the original
+   implementation-time reasoning this paragraph is drawn from.
 
 2. **Rwanda's holiday count is implemented as 14, not the 12 stated in
    the proposal text.** Independent verification (see `docs/SOURCES.md`)
