@@ -72,7 +72,7 @@
   <rect x="30" y="525" width="940" height="75" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
   <text x="50" y="547" font-size="13" font-weight="bold" fill="#0d1f15">Infrastructure</text>
   <text x="50" y="568" font-size="11" fill="#455a64">Railway.app (always-on hosting — avoids Render.com's cold-start latency, which would breach USSD's 3-second response SLA)</text>
-  <text x="50" y="585" font-size="11" fill="#455a64">GitHub Actions CI/CD on push to main (lint, 71 unit tests, Docker build)</text>
+  <text x="50" y="585" font-size="11" fill="#455a64">GitHub Actions CI on push to main (lint, 73 unit tests, Docker build; deploy to Railway is manual)</text>
 
   <!-- Arrows: frontend -> backend -->
   <line x1="185" y1="160" x2="185" y2="235" stroke="#37474f" stroke-width="1.5" marker-end="url(#arrow)"/>

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Form
 from fastapi.responses import PlainTextResponse
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.channels.ussd.fsm import handle_ussd_request
@@ -58,14 +59,24 @@ def get_forecast(product_code: str, horizon_days: int | None = None):
     return _forecast_service.forecast(product_code.upper(), horizon_days)
 
 
+class SaleCreate(BaseModel):
+    phone_number: str
+    product_code: str
+    quantity: float
+    unit: str
+    channel: ChannelEnum
+
+
 @router.post("/sales")
-def post_sale(
-    phone_number: str,
-    product_code: str,
-    quantity: float,
-    unit: str,
-    channel: ChannelEnum,
-    db: Session = Depends(get_db),
-):
-    log = record_sale(db, raw_phone=phone_number, product_code=product_code, quantity=quantity, unit=unit, channel=channel)
+def post_sale(sale: SaleCreate, db: Session = Depends(get_db)):
+    # phone_number arrives in the JSON body, never the URL, so it never
+    # lands in access logs before sales_service hashes it.
+    log = record_sale(
+        db,
+        raw_phone=sale.phone_number,
+        product_code=sale.product_code,
+        quantity=sale.quantity,
+        unit=sale.unit,
+        channel=sale.channel,
+    )
     return {"uuid": log.uuid, "logged_at": log.logged_at}

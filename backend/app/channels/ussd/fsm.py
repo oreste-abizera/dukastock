@@ -16,18 +16,36 @@ shopkeeper is mid-transaction on across those stateless round-trips within
 the 180-second MTN/Airtel timeout window.
 """
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 
 from sqlalchemy.orm import Session
 
+from app.channels.messages import forecast_message, sale_logged_message
 from app.core.config import get_settings
 from app.db.redis_client import clear_ussd_session, load_ussd_session, save_ussd_session
-from app.models.orm import ChannelEnum
+from app.models.orm import ChannelEnum, USSDSession
 from app.services.forecast_service import ForecastService
-from app.services.sales_service import record_sale
+from app.services.sales_service import get_or_create_shopkeeper, record_sale
 
 settings = get_settings()
 _forecast_service = ForecastService()
+
+
+def _persist_ussd_session_record(db: Session, session_id: str, shopkeeper_id: str, state: str) -> None:
+    """Write-through audit copy of USSD session state into Postgres/Supabase.
+
+    Redis (app.db.redis_client) remains the authoritative fast path the FSM
+    reads from on every keypress — this table previously existed in the
+    schema but nothing ever wrote to it, even though the architecture
+    claims Supabase stores USSD session data alongside Redis."""
+    record = db.get(USSDSession, session_id)
+    if record is None:
+        db.add(USSDSession(session_id=session_id, shopkeeper_id=shopkeeper_id, state=state))
+    else:
+        record.state = state
+        record.last_active = datetime.utcnow()
+    db.commit()
 
 
 class USSDState(str, Enum):
@@ -60,8 +78,11 @@ class USSDResponse:
     continue_session: bool
 
     def render(self) -> str:
+        # Enforced here, once, so every USSDResponse constructed anywhere in
+        # the FSM below respects Africa's Talking's 182-char USSD limit —
+        # no call site has to remember to truncate its own message text.
         prefix = "CON" if self.continue_session else "END"
-        return f"{prefix} {self.text}"
+        return f"{prefix} {self.text}"[: settings.ussd_max_chars]
 
 
 def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: str) -> USSDResponse:
@@ -70,11 +91,13 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
     Africa's Talking (e.g. "" on first dial, "1" after first keypress,
     "1*2" after second, etc).
     """
+    shopkeeper = get_or_create_shopkeeper(db, phone_number, ChannelEnum.ussd)
     inputs = text.split("*") if text else []
     state = load_ussd_session(session_id) or {"state": USSDState.MAIN_MENU.value}
 
     if not inputs:
         save_ussd_session(session_id, {"state": USSDState.MAIN_MENU.value})
+        _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.MAIN_MENU.value)
         return USSDResponse(text=MAIN_MENU_TEXT, continue_session=True)
 
     last_input = inputs[-1]
@@ -82,9 +105,11 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
     if state["state"] == USSDState.MAIN_MENU.value:
         if last_input == "1":
             save_ussd_session(session_id, {"state": USSDState.SELECT_PRODUCT.value, "flow": "sale"})
+            _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.SELECT_PRODUCT.value)
             return USSDResponse(text=PRODUCT_MENU_TEXT, continue_session=True)
         elif last_input == "2":
             save_ussd_session(session_id, {"state": USSDState.FORECAST_SELECT_PRODUCT.value})
+            _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.FORECAST_SELECT_PRODUCT.value)
             return USSDResponse(text=PRODUCT_MENU_TEXT, continue_session=True)
         return USSDResponse(text="Hitamo ikibazo cyemewe.\n" + MAIN_MENU_TEXT, continue_session=True)
 
@@ -93,6 +118,7 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
             return USSDResponse(text="Igicuruzwa ntikibonetse. " + PRODUCT_MENU_TEXT, continue_session=True)
         product_code, unit = PRODUCT_MENU[last_input]
         save_ussd_session(session_id, {"state": USSDState.ENTER_QUANTITY.value, "product_code": product_code, "unit": unit})
+        _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.ENTER_QUANTITY.value)
         return USSDResponse(text=f"Andika umubare w'ibyo wagurishije ({unit}):", continue_session=True)
 
     if state["state"] == USSDState.ENTER_QUANTITY.value:
@@ -105,7 +131,11 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
             quantity=quantity, unit=state["unit"], channel=ChannelEnum.ussd,
         )
         clear_ussd_session(session_id)
-        return USSDResponse(text="Murakoze! Igurisha ryanditswe.", continue_session=False)
+        _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.DONE.value)
+        return USSDResponse(
+            text=sale_logged_message(state["product_code"], quantity, state["unit"]),
+            continue_session=False,
+        )
 
     if state["state"] == USSDState.FORECAST_SELECT_PRODUCT.value:
         if last_input not in PRODUCT_MENU:
@@ -113,12 +143,10 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
         product_code, unit = PRODUCT_MENU[last_input]
         forecast = _forecast_service.forecast(product_code)
         clear_ussd_session(session_id)
+        _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.DONE.value)
         qty = forecast.get("predicted_quantity")
-        if qty is None:
-            msg = f"Nta modeli y'{product_code} irahari. Ongera ugerageze nyuma."
-        else:
-            msg = f"Mu cyumweru gitaha: {round(qty, 1)} {unit} ya {product_code}."
-        return USSDResponse(text=msg[: settings.ussd_max_chars], continue_session=False)
+        return USSDResponse(text=forecast_message(product_code, unit, qty), continue_session=False)
 
     clear_ussd_session(session_id)
+    _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.DONE.value)
     return USSDResponse(text="Ikosa ryabaye. Ongera ugerageze.", continue_session=False)

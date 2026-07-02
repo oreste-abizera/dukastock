@@ -9,6 +9,7 @@ directly to the sales log without NLP processing").
 """
 from datetime import datetime
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_phone_number
@@ -18,10 +19,20 @@ from app.models.orm import ChannelEnum, SalesLog, ShopkeeperProfile
 def get_or_create_shopkeeper(db: Session, raw_phone: str, channel: ChannelEnum) -> ShopkeeperProfile:
     shopkeeper_id = hash_phone_number(raw_phone)
     shopkeeper = db.get(ShopkeeperProfile, shopkeeper_id)
-    if shopkeeper is None:
-        shopkeeper = ShopkeeperProfile(uuid=shopkeeper_id, channel_preference=channel)
-        db.add(shopkeeper)
+    if shopkeeper is not None:
+        return shopkeeper
+
+    shopkeeper = ShopkeeperProfile(uuid=shopkeeper_id, channel_preference=channel)
+    db.add(shopkeeper)
+    try:
         db.commit()
+    except IntegrityError:
+        # Two concurrent first-time requests from the same phone number both
+        # passed the check above; whichever committed first wins the row.
+        db.rollback()
+        shopkeeper = db.get(ShopkeeperProfile, shopkeeper_id)
+        if shopkeeper is None:
+            raise
     return shopkeeper
 
 

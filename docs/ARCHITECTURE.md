@@ -30,13 +30,25 @@ forecasting pipeline:
 
 ## Why this stack
 
-- **FastAPI**: async webhook handling for two concurrent inbound providers
-  (Twilio + Africa's Talking) without blocking on the synchronous parts of
-  the ML inference path.
+- **FastAPI**: handles two concurrent inbound webhook providers (Twilio +
+  Africa's Talking). Webhook route handlers are plain `def`, not
+  `async def`, by design — every downstream call (SQLAlchemy's sync
+  `Session`, the NER pipeline, SARIMA/Prophet/XGBoost inference) is
+  itself blocking/CPU-bound, so FastAPI dispatches each request to its
+  threadpool automatically. Declaring these routes `async def` without
+  first moving the DB layer to an async driver would block the single
+  event loop on every request instead of just one worker thread — a
+  regression, not an improvement. A true async stack (asyncpg +
+  SQLAlchemy `AsyncSession` end to end) is the correct next step if
+  webhook volume ever requires it.
 - **Railway.app over Render.com**: Render's free tier cold-starts after
   inactivity, which would breach the ~3-second USSD response SLA that MTN
   and Airtel enforce at the telecom layer. Railway's always-on tier avoids
-  this.
+  this. Build/deploy config lives in `railway.json` (Dockerfile-based
+  build, health check at `/api/v1/health`); connecting the Railway
+  service to this repo and triggering the actual deploy is a manual,
+  one-time dashboard step — GitHub Actions runs CI (lint, tests, Docker
+  build) but does not push a deploy on its own.
 - **Redis with a 180-second TTL**: USSD is stateless per-request at the
   telecom layer — every keypress is a brand new HTTP call to our webhook
   with the full accumulated input string. Redis is the FSM's memory across

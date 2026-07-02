@@ -53,6 +53,7 @@ class ShopkeeperProfile(Base):
     sales_logs = relationship("SalesLog", back_populates="shopkeeper")
     forecast_results = relationship("ForecastResult", back_populates="shopkeeper")
     ussd_sessions = relationship("USSDSession", back_populates="shopkeeper")
+    nlp_parse_results = relationship("NLPParseResult", back_populates="shopkeeper")
 
 
 class SalesLog(Base):
@@ -89,11 +90,15 @@ class NLPParseResult(Base):
     __tablename__ = "nlp_parse_results"
 
     uuid = _uuid_column(primary_key=True)
+    shopkeeper_id = _uuid_column(foreign_key="shopkeeper_profiles.uuid")
     raw_message = Column(String, nullable=False)
     product_name = Column(String, nullable=True)
     quantity = Column(Float, nullable=True)
     unit = Column(String, nullable=True)
     confidence = Column(Float, nullable=False)
+    parsed_at = Column(DateTime, default=datetime.utcnow)
+
+    shopkeeper = relationship("ShopkeeperProfile", back_populates="nlp_parse_results")
 
 
 class USSDSession(Base):

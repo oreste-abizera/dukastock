@@ -81,7 +81,7 @@ For the full walkthrough with verification steps and troubleshooting, see
 
 ```bash
 git clone <this-repo>
-cd dukastock
+cd <the-cloned-folder>   # named per your local clone/unzip, not necessarily "dukastock"
 cp config/.env.example config/.env   # fill in Twilio/Africa's Talking sandbox keys
 docker-compose up --build
 ```

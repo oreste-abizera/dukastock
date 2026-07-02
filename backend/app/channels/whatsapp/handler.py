@@ -11,35 +11,49 @@ Twilio -> Duka Operator.
 from sqlalchemy.orm import Session
 from twilio.twiml.messaging_response import MessagingResponse
 
+from app.channels.messages import sale_logged_message, sale_not_understood_message
 from app.core.logging import get_logger
-from app.models.orm import ChannelEnum
+from app.models.orm import ChannelEnum, NLPParseResult
 from app.nlp.ner_pipeline import CommerceNERPipeline
 from app.services.forecast_service import ForecastService
-from app.services.sales_service import record_sale
+from app.services.sales_service import get_or_create_shopkeeper, record_sale
 
 logger = get_logger(__name__)
 _ner_pipeline = CommerceNERPipeline()
 _forecast_service = ForecastService()
 
 
-KINYARWANDA_REPLY_TEMPLATES = {
-    "sale_logged": "Murakoze! Twanditse: {product} {quantity} {unit}.",
-    "sale_not_understood": "Mbabarira, sinabashije gusobanukirwa ubutumwa bwawe. Ongera ugerageze.",
-    "forecast_reply": "Mu cyumweru gitaha, tubona ko uzagurisha hafi {qty} {unit} ya {product}.",
-}
+def _log_nlp_parse(db: Session, shopkeeper_id: str, raw_message: str, entity=None) -> None:
+    """Persist every parse attempt (including failed ones) for later NER
+    error analysis — this table previously existed in the schema but was
+    never written to."""
+    db.add(
+        NLPParseResult(
+            shopkeeper_id=shopkeeper_id,
+            raw_message=raw_message,
+            product_name=entity.product_name if entity else None,
+            quantity=entity.quantity if entity else None,
+            unit=entity.unit if entity else None,
+            confidence=entity.confidence if entity else 0.0,
+        )
+    )
+    db.commit()
 
 
 def handle_whatsapp_message(db: Session, from_number: str, body: str) -> str:
     """Process an inbound WhatsApp message and return TwiML response text."""
+    shopkeeper = get_or_create_shopkeeper(db, from_number, ChannelEnum.whatsapp)
     parsed = _ner_pipeline.parse(body)
     resp = MessagingResponse()
 
     if not parsed:
-        resp.message(KINYARWANDA_REPLY_TEMPLATES["sale_not_understood"])
+        _log_nlp_parse(db, shopkeeper.uuid, body)
+        resp.message(sale_not_understood_message())
         return str(resp)
 
     confirmations = []
     for entity in parsed:
+        _log_nlp_parse(db, shopkeeper.uuid, body, entity)
         if entity.product_name is None or entity.quantity is None:
             continue
         record_sale(
@@ -51,13 +65,11 @@ def handle_whatsapp_message(db: Session, from_number: str, body: str) -> str:
             channel=ChannelEnum.whatsapp,
         )
         confirmations.append(
-            KINYARWANDA_REPLY_TEMPLATES["sale_logged"].format(
-                product=entity.product_name, quantity=entity.quantity, unit=entity.unit or ""
-            )
+            sale_logged_message(entity.product_name, entity.quantity, entity.unit or "")
         )
 
     if not confirmations:
-        resp.message(KINYARWANDA_REPLY_TEMPLATES["sale_not_understood"])
+        resp.message(sale_not_understood_message())
     else:
         resp.message(" ".join(confirmations))
 
