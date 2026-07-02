@@ -22,6 +22,7 @@ interactively with the same underlying app.ml modules.
 """
 import argparse
 import json
+import logging
 import random
 import sys
 from datetime import datetime
@@ -34,6 +35,9 @@ import pandas as pd
 # Fix random seeds for reproducibility
 random.seed(42)
 np.random.seed(42)
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger("run_experiment")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "backend"))
 
@@ -63,9 +67,16 @@ except ImportError:
     _NBEATS_AVAILABLE = False
 
 
-def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, horizon: int = 7) -> dict:
+def run_for_product_and_density(
+    product_df: pd.DataFrame, density_pct: int, horizon: int = 7, context: str = ""
+) -> dict:
     """Run all five model classes for one product at one density level,
-    aggregating metrics across all walk-forward folds."""
+    aggregating metrics across all walk-forward folds.
+
+    `context` (e.g. "SUGAR/store 3/density 30%") is only used for log
+    messages when a model fit/predict fails and falls back to naive —
+    without it, a failure is silently invisible in the output and the
+    fallback is indistinguishable from naive genuinely winning."""
     sliced = temporal_density_slice(product_df, density_pct)
     folds = walk_forward_folds(sliced.train, horizon=horizon)
 
@@ -75,7 +86,7 @@ def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, hori
     model_fold_metrics = {name: [] for name in ["naive", "sarima", "prophet", "xgboost", "nbeats"]}
     dm_results = {name: [] for name in ["sarima", "prophet", "xgboost", "nbeats"]}
 
-    for train, test in folds:
+    for fold_idx, (train, test) in enumerate(folds):
         y_train = train["sales"]
         y_test = test["sales"].values
 
@@ -85,7 +96,8 @@ def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, hori
 
         try:
             sarima_preds = SARIMAModel().fit(y_train).predict(len(test)) if _SARIMA_AVAILABLE else naive_preds
-        except Exception:
+        except Exception as exc:
+            logger.warning("[%s] fold %d: sarima failed (%s), falling back to naive", context, fold_idx, exc)
             sarima_preds = naive_preds
         model_fold_metrics["sarima"].append(compute_all_metrics(y_test, sarima_preds))
         dm_results["sarima"].append(diebold_mariano_test(y_test, sarima_preds, naive_preds, h=horizon))
@@ -95,7 +107,8 @@ def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, hori
                 prophet_preds, _, _ = ProphetModel().fit(train["date"], y_train).predict(len(test), train["date"].max())
             else:
                 prophet_preds = naive_preds
-        except Exception:
+        except Exception as exc:
+            logger.warning("[%s] fold %d: prophet failed (%s), falling back to naive", context, fold_idx, exc)
             prophet_preds = naive_preds
         model_fold_metrics["prophet"].append(compute_all_metrics(y_test, prophet_preds))
         dm_results["prophet"].append(diebold_mariano_test(y_test, prophet_preds, naive_preds, h=horizon))
@@ -104,7 +117,8 @@ def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, hori
             xgb_model = XGBoostDemandModel().fit(train)
             future_features = add_lag_features(pd.concat([train, test]).reset_index(drop=True)).iloc[-len(test):]
             xgb_preds = xgb_model.predict(future_features)
-        except Exception:
+        except Exception as exc:
+            logger.warning("[%s] fold %d: xgboost failed (%s), falling back to naive", context, fold_idx, exc)
             xgb_preds = naive_preds
         model_fold_metrics["xgboost"].append(compute_all_metrics(y_test, xgb_preds))
         dm_results["xgboost"].append(diebold_mariano_test(y_test, xgb_preds, naive_preds, h=horizon))
@@ -112,7 +126,8 @@ def run_for_product_and_density(product_df: pd.DataFrame, density_pct: int, hori
         if _NBEATS_AVAILABLE:
             try:
                 nbeats_preds = NBEATSModel(horizon=len(test)).fit(train["date"], y_train).predict()
-            except Exception:
+            except Exception as exc:
+                logger.warning("[%s] fold %d: nbeats failed (%s), falling back to naive", context, fold_idx, exc)
                 nbeats_preds = naive_preds
         else:
             nbeats_preds = naive_preds
@@ -150,12 +165,16 @@ def _select_and_serialize_best_model(
     horizon: int,
 ) -> str:
     """
-    Pick the model with the lowest mean RMSE at 100% density (i.e. trained
-    on everything available — what would actually be deployed once a real
-    Duka has built up history) and serialize it wrapped in
-    SerializableForecastModel, so ForecastService can call
-    .predict_with_band() uniformly regardless of which of the five model
-    kinds won.
+    Pick the model with the lowest mean RMSE among those that are also
+    Diebold-Mariano significant against naive on >=50% of walk-forward
+    folds at 100% density (i.e. trained on everything available — what
+    would actually be deployed once a real Duka has built up history), and
+    serialize it wrapped in SerializableForecastModel, so ForecastService
+    can call .predict_with_band() uniformly regardless of which of the
+    five model kinds won. If no model clears that significance bar, naive
+    is served — shipping a model with a lower RMSE but no proven
+    statistical advantage over naive would misrepresent the primary
+    research finding.
 
     Returns the winning model's kind, for logging.
     """
@@ -169,7 +188,16 @@ def _select_and_serialize_best_model(
         return "naive (fallback: no folds evaluated at 100% density)"
 
     candidates = {name: metrics["rmse"] for name, metrics in full_density_metrics.items()}
-    best_kind = min(candidates, key=candidates.get)
+    significant_candidates = {
+        name: rmse
+        for name, rmse in candidates.items()
+        if name != "naive"
+        and full_density_metrics.get(name, {}).get("dm_vs_naive", {}).get("fraction_folds_significant", 0.0) >= 0.5
+    }
+    if significant_candidates:
+        best_kind = min(significant_candidates, key=significant_candidates.get)
+    else:
+        best_kind = "naive"
 
     y_full = product_df["sales"]
     dates_full = product_df["date"]
@@ -254,35 +282,46 @@ def main(data_path: str, output_dir: str, artifact_dir: str, horizon: int):
             )
             store_results: dict[str, dict] = {}
             for density in DENSITY_LEVELS:
-                print(f"[{product_code} / store {store}] density={density}% ...")
-                store_results[str(density)] = run_for_product_and_density(store_df, density, horizon)
+                context = f"{product_code}/store {store}/density {density}%"
+                print(f"[{context}] ...")
+                store_results[str(density)] = run_for_product_and_density(store_df, density, horizon, context=context)
             product_store_results[store] = store_results
 
         all_results[product_code] = product_store_results
 
         # For artifact serialization, use the full-history series for store 1
-        # as a representative series. The best model type is decided by the
-        # metric averaged across all stores at 100 % density.
+        # as a representative series. The best model type is decided by RMSE
+        # AND Diebold-Mariano significance, both averaged across all stores
+        # at 100% density.
         store_rmse: dict[str, list[float]] = {m: [] for m in ["naive","sarima","prophet","xgboost","nbeats"]}
+        store_sig: dict[str, list[float]] = {m: [] for m in ["sarima","prophet","xgboost","nbeats"]}
         for store_res in product_store_results.values():
             for m_name, m_metrics in store_res.get("100", {}).get("models", {}).items():
                 if "rmse" in m_metrics:
                     store_rmse[m_name].append(m_metrics["rmse"])
+                dm = m_metrics.get("dm_vs_naive")
+                if dm is not None:
+                    store_sig[m_name].append(dm["fraction_folds_significant"])
         mean_rmse = {m: float(np.mean(v)) for m, v in store_rmse.items() if v}
-        best_kind = min(mean_rmse, key=mean_rmse.get) if mean_rmse else "naive"
-        print(f"  [{product_code}] best model at 100% density (avg across stores): {best_kind}")
+        mean_sig = {m: float(np.mean(v)) for m, v in store_sig.items() if v}
 
         # Serialize using store 1's full history as the representative series
         rep_df = (
             fmcg[(fmcg["product_code"] == product_code) & (fmcg["store"] == stores[0])]
             .sort_values("date").reset_index(drop=True)
         )
+        fake_100pct_models = {
+            m: {"rmse": v, "dm_vs_naive": {"fraction_folds_significant": mean_sig.get(m, 0.0)}} if m != "naive"
+            else {"rmse": v}
+            for m, v in mean_rmse.items()
+        }
         winning_kind = _select_and_serialize_best_model(
             product_code, rep_df,
-            {"100": {"models": {m: {"rmse": v} for m, v in mean_rmse.items()}}},
+            {"100": {"models": fake_100pct_models}},
             artifact_dir, horizon,
         )
-        print(f"  [{product_code}] serialized as '{winning_kind}'.")
+        print(f"  [{product_code}] serialized as '{winning_kind}' "
+              f"(mean RMSE at 100% density: {mean_rmse}, mean fraction significant: {mean_sig})")
 
     ts = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
     output_path = Path(output_dir) / f"experiment_results_{ts}.json"
@@ -314,9 +353,29 @@ def main(data_path: str, output_dir: str, artifact_dir: str, horizon: int):
     agg_path = Path(output_dir) / "ml_benchmark_results.csv"
     agg_df.to_csv(agg_path, index=False)
 
+    # Threshold density: the direct, reproducible answer to the primary
+    # research question — lowest density at which each (product, model)
+    # pair reaches DM significance on >=50% of walk-forward folds,
+    # store-averaged. Mirrors notebook 02's first_threshold() so both the
+    # interactive and headless pipelines produce the same result.
+    threshold_rows = []
+    dm_agg = agg_df.dropna(subset=["fraction_folds_significant"])
+    for (product, model), group in dm_agg.groupby(["product", "model"]):
+        passing = group[group["fraction_folds_significant"] >= 0.5].sort_values("density_pct")
+        threshold_rows.append({
+            "product": product,
+            "model": model,
+            "threshold_density_pct": int(passing.iloc[0]["density_pct"]) if len(passing) else None,
+        })
+    threshold_df = pd.DataFrame(threshold_rows)
+    threshold_path = Path(output_dir) / "threshold_density.csv"
+    threshold_df.to_csv(threshold_path, index=False)
+
     print(f"\nJSON written to: {output_path}")
     print(f"Raw CSV: {raw_path} ({len(raw_df)} rows)")
     print(f"Aggregated CSV: {agg_path} ({len(agg_df)} rows)")
+    print(f"Threshold density CSV: {threshold_path}")
+    print(threshold_df.to_string(index=False))
 
 
 if __name__ == "__main__":
