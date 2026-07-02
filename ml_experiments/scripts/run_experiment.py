@@ -84,15 +84,29 @@ def run_for_product_and_density(
         return {"density_pct": density_pct, "n_observations": sliced.n_observations, "folds_evaluated": 0, "models": {}}
 
     model_fold_metrics = {name: [] for name in ["naive", "sarima", "prophet", "xgboost", "nbeats"]}
-    dm_results = {name: [] for name in ["sarima", "prophet", "xgboost", "nbeats"]}
+    # Pooled across all folds, then ONE Diebold-Mariano test per model — not
+    # one test per fold. A single 7-day fold gives the Newey-West HAC
+    # variance estimator only n=7 points to fit h-1=6 lag terms, which
+    # collapses to a degenerate (<=0) variance estimate most of the time,
+    # forcing a "not significant" result regardless of true model quality
+    # (verified: a model 3x more accurate than naive on every fold still
+    # failed to reach significance ~60% of the time under the per-fold
+    # design). Pooling the fold residuals first (n ~= 6*7 = 42) keeps the
+    # same h=7 lag structure — still correct for 7-step-ahead forecasts —
+    # but gives the estimator enough data to actually work.
+    pooled_y_test = []
+    pooled_naive_preds = []
+    pooled_model_preds = {name: [] for name in ["sarima", "prophet", "xgboost", "nbeats"]}
 
     for fold_idx, (train, test) in enumerate(folds):
         y_train = train["sales"]
         y_test = test["sales"].values
+        pooled_y_test.append(y_test)
 
         naive = NaiveBaseline().fit(y_train)
         naive_preds = naive.predict(len(test))
         model_fold_metrics["naive"].append(compute_all_metrics(y_test, naive_preds))
+        pooled_naive_preds.append(naive_preds)
 
         try:
             sarima_preds = SARIMAModel().fit(y_train).predict(len(test)) if _SARIMA_AVAILABLE else naive_preds
@@ -100,7 +114,7 @@ def run_for_product_and_density(
             logger.warning("[%s] fold %d: sarima failed (%s), falling back to naive", context, fold_idx, exc)
             sarima_preds = naive_preds
         model_fold_metrics["sarima"].append(compute_all_metrics(y_test, sarima_preds))
-        dm_results["sarima"].append(diebold_mariano_test(y_test, sarima_preds, naive_preds, h=horizon))
+        pooled_model_preds["sarima"].append(sarima_preds)
 
         try:
             if _PROPHET_AVAILABLE:
@@ -111,7 +125,7 @@ def run_for_product_and_density(
             logger.warning("[%s] fold %d: prophet failed (%s), falling back to naive", context, fold_idx, exc)
             prophet_preds = naive_preds
         model_fold_metrics["prophet"].append(compute_all_metrics(y_test, prophet_preds))
-        dm_results["prophet"].append(diebold_mariano_test(y_test, prophet_preds, naive_preds, h=horizon))
+        pooled_model_preds["prophet"].append(prophet_preds)
 
         try:
             xgb_model = XGBoostDemandModel().fit(train)
@@ -121,7 +135,7 @@ def run_for_product_and_density(
             logger.warning("[%s] fold %d: xgboost failed (%s), falling back to naive", context, fold_idx, exc)
             xgb_preds = naive_preds
         model_fold_metrics["xgboost"].append(compute_all_metrics(y_test, xgb_preds))
-        dm_results["xgboost"].append(diebold_mariano_test(y_test, xgb_preds, naive_preds, h=horizon))
+        pooled_model_preds["xgboost"].append(xgb_preds)
 
         if _NBEATS_AVAILABLE:
             try:
@@ -132,16 +146,26 @@ def run_for_product_and_density(
         else:
             nbeats_preds = naive_preds
         model_fold_metrics["nbeats"].append(compute_all_metrics(y_test, nbeats_preds))
-        dm_results["nbeats"].append(diebold_mariano_test(y_test, nbeats_preds, naive_preds, h=horizon))
+        pooled_model_preds["nbeats"].append(nbeats_preds)
+
+    pooled_y_test_arr = np.concatenate(pooled_y_test)
+    pooled_naive_arr = np.concatenate(pooled_naive_preds)
+    dm_results = {
+        name: diebold_mariano_test(pooled_y_test_arr, np.concatenate(preds), pooled_naive_arr, h=horizon)
+        for name, preds in pooled_model_preds.items()
+    }
 
     def _aggregate(metric_dicts: list[dict]) -> dict:
         keys = metric_dicts[0].keys()
         return {k: float(np.mean([m[k] for m in metric_dicts])) for k in keys}
 
-    def _aggregate_dm(dm_list) -> dict:
-        sig_fraction = float(np.mean([d.significant_at_05 for d in dm_list]))
-        mean_p = float(np.mean([d.p_value for d in dm_list]))
-        return {"fraction_folds_significant": sig_fraction, "mean_p_value": mean_p}
+    def _dm_to_dict(dm) -> dict:
+        # Field names kept as "fraction_folds_significant" / "mean_p_value"
+        # for backward compatibility with existing CSV columns and
+        # notebook plotting cells, even though each is now a single pooled
+        # result (0.0/1.0 and one p-value) rather than an average over
+        # several per-fold tests.
+        return {"fraction_folds_significant": float(dm.significant_at_05), "mean_p_value": float(dm.p_value)}
 
     return {
         "density_pct": density_pct,
@@ -149,10 +173,10 @@ def run_for_product_and_density(
         "folds_evaluated": len(folds),
         "models": {
             "naive": _aggregate(model_fold_metrics["naive"]),
-            "sarima": {**_aggregate(model_fold_metrics["sarima"]), "dm_vs_naive": _aggregate_dm(dm_results["sarima"])},
-            "prophet": {**_aggregate(model_fold_metrics["prophet"]), "dm_vs_naive": _aggregate_dm(dm_results["prophet"])},
-            "xgboost": {**_aggregate(model_fold_metrics["xgboost"]), "dm_vs_naive": _aggregate_dm(dm_results["xgboost"])},
-            "nbeats": {**_aggregate(model_fold_metrics["nbeats"]), "dm_vs_naive": _aggregate_dm(dm_results["nbeats"])},
+            "sarima": {**_aggregate(model_fold_metrics["sarima"]), "dm_vs_naive": _dm_to_dict(dm_results["sarima"])},
+            "prophet": {**_aggregate(model_fold_metrics["prophet"]), "dm_vs_naive": _dm_to_dict(dm_results["prophet"])},
+            "xgboost": {**_aggregate(model_fold_metrics["xgboost"]), "dm_vs_naive": _dm_to_dict(dm_results["xgboost"])},
+            "nbeats": {**_aggregate(model_fold_metrics["nbeats"]), "dm_vs_naive": _dm_to_dict(dm_results["nbeats"])},
         },
     }
 
