@@ -1,6 +1,24 @@
 """
-Generate 200 realistic Kinyarwanda-English commerce NER messages
-with correct character-offset annotations for PRODUCT, QUANTITY, UNIT.
+SYNTHETIC DATA — NOT A REAL ANNOTATED TEST SET. DO NOT REPORT IN THE THESIS.
+
+Generates 200 template-based Kinyarwanda-English commerce NER messages with
+programmatically-computed (not human-verified) character-offset annotations
+for PRODUCT, QUANTITY, UNIT. The labels are correct by construction
+(str.find() + a self-assertion that the label matches what was just
+inserted) — this is span-computation, not annotation. There is no
+independent human judgment anywhere in this file's output, so it cannot
+produce meaningful precision/recall/F1 against a "ground truth" it wrote
+itself, and it cannot be used to compute a real Cohen's Kappa (there is no
+second annotator).
+
+This script exists only to pipeline-test Notebook 3 / train_xlmr_ner.py
+before real data exists (see USING_SYNTHETIC_DATA in Notebook 3, which
+prints this fact on every figure it produces from this data). For the real
+200-message test set, follow docs/ANNOTATION_GUIDE.md — collect actual
+messages from Duka shopkeepers (or elicited from real people), have them
+independently labeled by two human annotators, and place the result at
+ml_experiments/data/annotations.jsonl. Do NOT copy this script's output
+there — that would silently make USING_SYNTHETIC_DATA report False.
 
 Intentional variation across:
   - language mix (KW-only, EN-only, code-mixed)
@@ -13,6 +31,7 @@ Intentional variation across:
 """
 
 import json, random
+from pathlib import Path
 
 random.seed(42)
 
@@ -575,12 +594,16 @@ while len(records) < 200:
 print(f"Generated {len(records)} records in {attempts} attempts")
 
 # ── Write JSONL ──────────────────────────────────────────────────────────────
-out_path = "/sessions/affectionate-cool-mayer/mnt/outputs/annotations.jsonl"
+# Deliberately named/located so it can never be mistaken for (or accidentally
+# copied to) the real ml_experiments/data/annotations.jsonl path.
+out_path = str(Path(__file__).parent / "annotations_SYNTHETIC_placeholder.jsonl")
 with open(out_path, "w", encoding="utf-8") as f:
     for r in records:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 print(f"Written to {out_path}")
+print("Reminder: this is SYNTHETIC data for pipeline testing only — see the")
+print("module docstring. It is not the thesis's real annotated test set.")
 
 # ── Quick sanity check ───────────────────────────────────────────────────────
 entity_labels = [e["label"] for r in records for e in r["entities"]]
