@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -74,6 +75,16 @@ class Settings(BaseSettings):
     # --- NLP ---
     ner_model_dir: str = ""  # resolved at startup by _default_ner_model_dir()
     ner_confidence_threshold: float = 0.55
+
+    @field_validator("database_url")
+    @classmethod
+    def _normalize_postgres_scheme(cls, v: str) -> str:
+        # Coolify, Heroku-style providers, and sometimes Supabase all hand out
+        # "postgres://" URLs, but SQLAlchemy 2.0 dropped that scheme alias and
+        # only recognizes "postgresql://" (NoSuchModuleError otherwise).
+        if v.startswith("postgres://"):
+            return "postgresql://" + v[len("postgres://"):]
+        return v
 
     def model_post_init(self, __context: object) -> None:
         if not self.ner_model_dir:
