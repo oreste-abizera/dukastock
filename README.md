@@ -15,11 +15,10 @@ deployment writeup.
 
 ## Demo video
 
-**TODO**: add the ~5-minute walkthrough video link here once recorded.
-Focus on core functionality (WhatsApp sale logging via the fine-tuned
-NER model, USSD menu including sales history and language switching, a
-forecast lookup) — there's no signup/login flow in this system to skip,
-since shopkeepers are identified by phone number across USSD/WhatsApp.
+**Watch: https://www.bugufi.link/bWofKw** — a walkthrough of core
+functionality: WhatsApp sale logging via the fine-tuned NER model, the
+USSD menu including sales history and language switching, and a
+forecast lookup.
 
 ## Testing results & analysis
 
@@ -27,9 +26,7 @@ since shopkeepers are identified by phone number across USSD/WhatsApp.
   across different strategies, data values, and hardware/software
   environments.
 - [`docs/ANALYSIS_DISCUSSION_RECOMMENDATIONS.md`](docs/ANALYSIS_DISCUSSION_RECOMMENDATIONS.md)
-  — analysis, discussion, and recommendations (**confirm with your
-  supervisor whether this needs to be written up or is assessed in
-  conversation** — see the note at the top of that file).
+  — analysis, discussion, and recommendations.
 
 **New to this repo? Start with [`RUNBOOK.md`](RUNBOOK.md)** — a complete,
 numbered walkthrough from an empty machine to a running system, including
