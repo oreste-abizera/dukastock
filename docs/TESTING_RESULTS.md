@@ -5,12 +5,11 @@ the three demonstration types asked for: different testing strategies,
 different data values, and performance across hardware/software
 environments.
 
-Everything below marked with real command output was actually executed
-and verified live on **2026-07-06** (the automated tests, and all API
-calls against the production deployment at
-`https://api.dukastock.oreste.dev`). Items marked `TODO` need a screenshot
-added by hand — see each one for exactly what to capture and where to
-save it.
+Everything below was actually executed and verified live on **2026-07-06**
+— the automated tests, all API calls against the production deployment
+at `https://api.dukastock.oreste.dev`, and the accompanying screenshots
+(a real phone's WhatsApp, the Coolify dashboard, Swagger UI, and the
+Africa's Talking USSD simulator).
 
 ---
 
@@ -30,8 +29,8 @@ personalized forecasting service, sales aggregation, and real
 `TestClient` HTTP-layer tests hitting the actual webhook/forecast/sales
 endpoints.
 
-**TODO**: `docs/screenshots/pytest_run.png` — a terminal screenshot of the
-above command running, for visual confirmation alongside this transcript.
+*(Terminal screenshot of this run not included — the transcript above is
+the verified real output.)*
 
 ### 1.2 Live production API testing (curl)
 
@@ -61,20 +60,22 @@ CON Murakaza neza kuri DukaStock
 4. Hindura ururimi
 ```
 
+Same flow via Africa's Talking's USSD simulator, dialing the sandbox
+service code end to end:
+
+![USSD main menu, showing the sales-history and language-switching options added this session](screenshots/ussd_main_menu.png)
+
+![USSD product selection menu, reached after choosing an action from the main menu](screenshots/ussd_product_menu.png)
+
+![USSD forecast result: "Mu cyumweru gitaha, tubona ko uzagurisha hafi 115.0 kg ya SUGAR" — the global forecast model's prediction, delivered end-to-end through the USSD channel](screenshots/ussd_forecast_result.png)
+
 ### 1.3 Real device / real messaging platform testing
 
-**TODO**: `docs/screenshots/whatsapp_real_test.png` — you already have
-this from the live phone test earlier today (the exchange showing
-"Nabagurishije isukari ibiro bitatu namavuta litre imwe" →
-"Murakoze! Twanditse: SUGAR 3 kg. Murakoze! Twanditse: OIL 1 litre." on
-your actual phone's WhatsApp). Save that screenshot here.
+![Real WhatsApp exchange on an actual phone: "Nabagurishije isukari ibiro bitatu namavuta litre imwe" correctly parsed into two separate confirmed sales, SUGAR 3 kg and OIL 1 litre, by the live fine-tuned XLM-R model](screenshots/whatsapp_real_test.png)
 
-**TODO**: `docs/screenshots/coolify_deployment_status.png` — a screenshot
-of Coolify's dashboard showing the application as "Running (healthy)".
+![Coolify dashboard showing the DukaStock application as Running (healthy) in production](screenshots/coolify_deployment_status.png)
 
-**TODO**: `docs/screenshots/swagger_ui.png` — a screenshot of
-`https://api.dukastock.oreste.dev/docs` (Swagger UI) showing the API's
-endpoint list, ideally with one endpoint expanded/executed.
+![Swagger UI at https://api.dukastock.oreste.dev/docs listing all 5 API endpoints (health, WhatsApp webhook, USSD webhook, forecast, sales) and their schemas](screenshots/swagger_ui.jpeg)
 
 ---
 
@@ -150,7 +151,6 @@ request for a product with no trained model returns an explicit
 | Docker Compose (local) | Local full-stack dev | `docker-compose.yml` — Postgres + Redis + backend, verified as a parity check against production's stack |
 | Coolify (remote, containerized, HTTPS) | Production | Full deployment behind Let's Encrypt via Coolify's reverse proxy — see `RUNBOOK.md` Section 13 |
 
-**TODO**: `docs/screenshots/local_training_terminal.png` — a screenshot of
-the local XLM-R training run completing (the `train_runtime` line from
-the training log), to visually pair with the "runs fast on Apple Silicon"
-claim above.
+*(Terminal screenshot of the training run not included — the real
+`train_runtime` figure from that session is quoted directly in the table
+above.)*
