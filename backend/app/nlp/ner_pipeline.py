@@ -121,9 +121,22 @@ class CommerceNERPipeline:
                     # addition to, or instead of, digits — map through the
                     # same lexicon the RapidFuzz fallback uses.
                     qty = KINYARWANDA_NUMBERS.get(word.lower())
-            unit = units[i]["word"] if i < len(units) else None
+            unit = units[i]["word"].lower() if i < len(units) else None
+            if unit is not None:
+                unit = UNIT_WORDS.get(unit, unit)
             confidence = float(prod["score"])
-            results.append(NERResult(prod["word"], qty, unit, confidence))
+            # Normalize the extracted span to a canonical product code the
+            # same way the RapidFuzz fallback does (PRODUCT_LEXICON), so
+            # downstream sales logging/forecasting see "SUGAR", not whatever
+            # surface form XLM-R happened to extract ("isukari"). Without
+            # this, product_name never matched the codes used everywhere
+            # else in the system -- invisible until now because the model
+            # was never confident enough to actually be used.
+            product_match = process.extractOne(
+                prod["word"].lower(), PRODUCT_LEXICON.keys(), scorer=fuzz.ratio, score_cutoff=80
+            )
+            product_name = PRODUCT_LEXICON[product_match[0]] if product_match else prod["word"]
+            results.append(NERResult(product_name, qty, unit, confidence))
         return results
 
     def _parse_with_rapidfuzz(self, message: str, score_cutoff: int = 80) -> list[NERResult]:

@@ -110,6 +110,10 @@ def train(annotations_path: str, output_dir: str, epochs: int = 10):
         per_device_eval_batch_size=8,
         eval_strategy="epoch",
         save_strategy="epoch",
+        save_total_limit=2,  # each checkpoint includes optimizer state (~3x
+        # the model size); unbounded accumulation over many epochs fills the
+        # disk. load_best_model_at_end still keeps the best checkpoint even
+        # if it ages out of this window.
         load_best_model_at_end=True,
         # Select the checkpoint with the highest token-level F1, not lowest
         # loss. Minimizing loss can diverge from maximising F1 on imbalanced
