@@ -8,8 +8,9 @@ environments.
 Everything below was actually executed and verified live on **2026-07-06**
 — the automated tests, all API calls against the production deployment
 at `https://api.dukastock.oreste.dev`, and the accompanying screenshots
-(a real phone's WhatsApp, the Coolify dashboard, Swagger UI, and the
-Africa's Talking USSD simulator).
+(a real phone's WhatsApp conversation spanning two days, the Coolify
+dashboard, Swagger UI, and Africa's Talking's USSD simulator and real
+session log).
 
 ---
 
@@ -69,13 +70,27 @@ service code end to end:
 
 ![USSD forecast result: "Mu cyumweru gitaha, tubona ko uzagurisha hafi 115.0 kg ya SUGAR" — the global forecast model's prediction, delivered end-to-end through the USSD channel](screenshots/ussd_forecast_result.png)
 
+![Africa's Talking's real USSD session log, showing repeated dial-ins against the live sandbox service code over several hours, with a mix of Success and Incomplete sessions, hop counts, and durations](screenshots/ussd_sessions_log.png)
+
 ### 1.3 Real device / real messaging platform testing
 
-![Real WhatsApp exchange on an actual phone: "Nabagurishije isukari ibiro bitatu namavuta litre imwe" correctly parsed into two separate confirmed sales, SUGAR 3 kg and OIL 1 litre, by the live fine-tuned XLM-R model](screenshots/whatsapp_real_test.png)
+![A real, multi-day WhatsApp conversation with the deployed system: successful multi-entity parsing ("Nabagurishije isukari ibiro bitatu namavuta litre imwe" -> SUGAR 3 kg + OIL 1 litre), correct handling of an unrecognized product ("nagurishije juice litiro 5"), and a graceful "couldn't understand" reply to an unrelated message ("amakuru" -- a greeting, not a sale) rather than a crash or a wrong guess](screenshots/whatsapp_real_test.png)
 
 ![Coolify dashboard showing the DukaStock application as Running (healthy) in production](screenshots/coolify_deployment_status.png)
 
+![Coolify's Persistent Storage configuration: two directory mounts keeping the ML forecast artifacts and the fine-tuned NER model on disk across redeploys](screenshots/coolify_persistent_storage.png)
+
 ![Swagger UI at https://api.dukastock.oreste.dev/docs listing all 5 API endpoints (health, WhatsApp webhook, USSD webhook, forecast, sales) and their schemas](screenshots/swagger_ui.jpeg)
+
+### 1.4 Real NER annotation in progress (RQ2 data collection)
+
+200 real messages were collected directly from Duka shopkeepers and are
+being annotated span-by-span (PRODUCT/QUANTITY/UNIT) in Doccano, running
+locally per `docs/ANNOTATION_GUIDE.md`:
+
+![Doccano dataset view: the 200 real collected messages imported, with several already marked Finished](screenshots/doccano_dataset_progress.png)
+
+![Doccano annotation editor: message 1 of 200 with PRODUCT/QUANTITY/UNIT spans labeled, and the Progress panel showing 26 of 200 messages (13%) completed so far](screenshots/doccano_annotation_editor.png)
 
 ---
 

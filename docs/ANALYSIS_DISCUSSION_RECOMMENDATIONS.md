@@ -43,13 +43,13 @@ within the project timeline, not an oversight.
 ### RQ2 — XLM-R vs. RapidFuzz NER
 
 Two hundred real messages were collected directly from Duka shopkeepers
-and are staged for annotation (`ml_experiments/data/Kinyarwanda Shopkeeper
-Dataset.xlsx`, plain-text extract at
-`ml_experiments/data/shopkeeper_messages_for_doccano.txt`). Entity-span
-annotation (PRODUCT/QUANTITY/UNIT) against this real set, and the
-resulting precision/recall/F1/Cohen's Kappa comparison against RapidFuzz,
-is the one research result not yet available at the time of this
-submission.
+(`ml_experiments/data/Kinyarwanda Shopkeeper Dataset.xlsx`, plain-text
+extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`) and
+entity-span annotation (PRODUCT/QUANTITY/UNIT) is underway in Doccano per
+`docs/ANNOTATION_GUIDE.md` — 26 of 200 messages (13%) fully labeled as of
+this submission. The resulting precision/recall/F1/Cohen's Kappa
+comparison against RapidFuzz on the completed real set is the one
+research result not yet available.
 
 What has been demonstrated is that the full pipeline works correctly
 end-to-end: XLM-R was fine-tuned (on the synthetic placeholder set, since
