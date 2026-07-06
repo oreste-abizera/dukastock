@@ -633,7 +633,7 @@ the Africa's Talking sandbox."
 
 ---
 
-## 12. Submission-readiness checklist (as of last audit, 2026-07-01)
+## 12. Submission-readiness checklist (last updated 2026-07-06)
 
 | Item | Status | Action needed |
 |---|---|---|
@@ -644,37 +644,165 @@ the Africa's Talking sandbox."
 | N-BEATS max_steps=500 (GPU) for convergence | **Done** | None |
 | Reproducibility seed (42) in all experiment entry points | **Done** | None |
 | All four model classes implemented | **Done** | None |
-| Threshold-density rule (`>=50% folds significant`) as pipeline output | **Done** | `run_experiment.py` now writes `threshold_density.csv` directly (previously only in Notebook 2, not the headless script) |
+| Threshold-density rule (`>=50% folds significant`) as pipeline output | **Done** | `run_experiment.py` writes this directly (previously only in Notebook 2) |
 | Model-fit failures logged, not silently swallowed | **Done** | `run_experiment.py` logs which model/fold/reason on every fallback-to-naive |
 | Best-model artifact selection respects DM significance | **Done** | Previously picked lowest RMSE even if not significantly better than naive |
-| cmdstan (Prophet's Stan backend) | **BROKEN on this Mac** | `install_cmdstan` fails: this machine's `/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` is missing/mismatched vs. the active Xcode toolchain (`xcrun` can't locate it) — a local toolchain issue, not a code bug. Doesn't block Kaggle/Colab runs (Linux). To fix locally: reinstall Command Line Tools (`sudo rm -rf /Library/Developer/CommandLineTools && xcode-select --install`), or just don't run Notebook 2 locally |
-| ML benchmark experiment results (threshold curve) | **MISSING** | Re-run Notebook 2 on Kaggle/Colab GPU (~10-14h) — now resumable/checkpointed, see Notebook 2 Cells 11a-11f |
-| Serialized model artifacts (`.joblib` per product) | **MISSING** | Produced automatically by `run_experiment.py` |
-| 200-message annotated NER test set (real data) | **MISSING** | Human annotation required — see Section 6. The synthetic placeholder (`cowork/annotations_SYNTHETIC_placeholder.jsonl`, renamed from `annotations.jsonl` and re-documented today to prevent it being mistaken for real data) is not a substitute |
-| Cohen's Kappa from real second annotator | **MISSING** | Follows from annotation |
-| XLM-R fine-tuning on real annotations | **MISSING** | Run after annotations complete (Notebook 3 / train_xlmr_ner.py) |
-| NISR EICV7 cross-validation of the FMCG product subset | **MISSING** | Proposal Objective 1 promises this; nothing in the repo compares the 5-item Kaggle subset against real EICV7 consumption shares. `RESEARCH_DESIGN.md` already discloses the mapping is unverified — either do the comparison or soften the proposal's "cross-validated" language before defense |
+| cmdstan (Prophet's Stan backend) | **BROKEN on this Mac** | Local toolchain issue, not a code bug (see Section 10, Issue 4). Doesn't block Kaggle/Colab (Linux) |
+| ML benchmark experiment (density × model matrix) | **Done** | `ml_experiments/results/ml_benchmark_results.csv` / `_raw.csv` exist (run 2026-07-03). `threshold_density.csv` itself hasn't been separately regenerated from this run — trivial to derive from the existing CSV (same logic as `run_experiment.py:380-396`) if the thesis write-up needs that exact file |
+| Serialized model artifacts (`.joblib` per product) | **Done** | Generated via `ml_experiments/scripts/serialize_from_results.py`, which reuses the already-completed benchmark results to pick/fit the winning model per product without re-running the full 10-14h sweep. Deployed to production (Coolify persistent volume) |
+| Per-shopkeeper personalized forecasting | **Done** | `app/services/personalized_forecast_service.py` — naive/XGBoost, gated on a real per-shopkeeper Diebold-Mariano test against naive, reusing the same walk-forward methodology as the offline experiment. Falls back to the global model until a shopkeeper has enough history. Batch job: `backend/scripts/train_personalized_forecasts.py` |
+| 200-message annotated NER test set (real data) | **In progress** | 200 real messages **collected** from real Duka shopkeepers (`ml_experiments/data/Kinyarwanda Shopkeeper Dataset.xlsx`, plain-text extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`). **Entity-span annotation (PRODUCT/QUANTITY/UNIT) in Doccano is not yet complete** — see `docs/ANNOTATION_GUIDE.md`. Until annotated and converted via `convert_doccano_export.py`, `ml_experiments/data/annotations.jsonl` doesn't exist and the pipeline still uses the synthetic placeholder |
+| Cohen's Kappa from real second annotator | **MISSING** | Follows from annotation above |
+| XLM-R fine-tuning on real annotations | **MISSING (for the real result)** | Fine-tuned today on the **synthetic placeholder** data (`cowork/annotations_SYNTHETIC_placeholder.jsonl`) and deployed to production — confirmed working end-to-end on a live WhatsApp message (multi-product extraction, correct canonical codes). This proves the pipeline works; the F1/precision/recall/Kappa from that run are **not valid to cite as the RQ2 result** until re-run on the real annotated set once it exists |
+| NISR EICV7 cross-validation of the FMCG product subset | **MISSING** | Unchanged — `RESEARCH_DESIGN.md` already discloses the mapping is unverified |
 | Three-channel prototype (WhatsApp / USSD / SMS) | **Done** | None |
-| Privacy: phone number hashing (Law 058/2021) | **Done** | Also fixed today: `POST /sales` used to take `phone_number` as a query param (landing in access logs pre-hash) — now a JSON body field |
-| Alembic migrations | **Done** | Was completely broken (`script.py.mako` template missing, zero migrations ever generated) — `alembic upgrade head` had never created the production schema even once. Fixed and verified against a real Postgres container today |
-| `NLPParseResult` table | **Done** | Was schema-only dead code (defined, never written to, no FK to shopkeeper). Now has a `shopkeeper_id` FK and the WhatsApp handler logs every parse attempt (success or failure) |
-| `USSDSession` Postgres table | **Done** | Was dead code — all session state lived only in Redis, contradicting the architecture's "Supabase stores USSD session data" claim. Now write-through persisted alongside Redis |
-| docker-compose Postgres parity | **Done** | Previously hardcoded SQLite, so the Postgres/Supabase path was never exercised locally. Added a real `postgres` service + alembic-on-boot; verified live (containers up, migration ran, a real API call round-tripped through hashing to a Postgres row) |
-| API-level test coverage | **Done** | Was zero — all 73 tests were unit-level with mocked dependencies, no `TestClient` anywhere. Added 7 tests hitting the real HTTP layer (webhooks, `/sales`, `/forecast`, full USSD flow) |
-| Consent form (English + Kinyarwanda) | **Done** | Did not exist despite being a budgeted line item and required for the SUS field session. Drafted today at `docs/CONSENT_FORM.md` — **fill in the actual compensation amount before printing**, and note the Kinyarwanda translation hasn't been formally back-translated/validated (same caveat as the SUS questionnaire's own translation) |
+| USSD: view sales history + language switching (Kinyarwanda/English) | **Done** | Added 2026-07-06; `ShopkeeperProfile.locale` was schema-only dead code before this, now wired to every USSD menu/prompt |
+| Privacy: phone number hashing (Law 058/2021) | **Done** | `POST /sales` takes `phone_number` as a JSON body field, never a URL/query param |
+| Alembic migrations | **Done** | Verified against a real Postgres container (Coolify production) |
+| `NLPParseResult` table | **Done** | Has a `shopkeeper_id` FK; WhatsApp handler logs every parse attempt |
+| `USSDSession` Postgres table | **Done** | Write-through persisted alongside Redis |
+| docker-compose Postgres parity | **Done** | Verified live against a real Postgres container |
+| API-level test coverage | **Done** | Real `TestClient` HTTP-layer tests (webhooks, `/sales`, `/forecast`, full USSD flow) |
+| Consent form (English + Kinyarwanda) | **Done** | `docs/CONSENT_FORM.md` — **fill in the actual compensation amount before printing**; Kinyarwanda translation not formally back-translated |
 | SUS demonstration session (≥3 Duka operators) | **MISSING** | Field session required |
-| CI actually gates on lint | **Done** | `ruff check` ran with `--exit-zero` (could never fail the build) — fixed after confirming the one real lint violation was a false positive (canonical Easter-algorithm variable name) |
-| "CI/CD" claim accuracy | **Done** | Was CI-only (no deploy step) documented as if deploy were automated. Added a real `railway.json` build/deploy config and corrected the docs/diagram wording to say deploy is a manual dashboard step |
-| Unit test suite | **Done** | 80 tests passing (was 73; +7 API-level) |
+| CI actually gates on lint | **Done** | None |
+| Unit test suite | **Done** | **97 tests passing** (was 73 as of last audit; +12 for personalized forecasting/USSD, +7 API-level, +NER/sales-aggregation coverage) |
 | NER model path auto-detection | **Done** | None |
-| USSD webhook accepts AT's `serviceCode`/`networkCode` | **Done** | None |
-| ForecastService `no_model` status signal | **Done** | None |
+| Production deployment (Coolify, Docker, Postgres, Redis) | **Done** | Live at `https://api.dukastock.oreste.dev`, verified via health check, real WhatsApp exchange, USSD flow, and personalized forecast serving. Full deployment steps: **Section 13** below |
 | `PHONE_HASH_SALT` startup assertion (non-dev environments) | **Done** | None |
-| Honest data limitation disclosure (proxy dataset, Rwanda features) | **Done** | None — documented in Notebooks 1/2 and RESEARCH_DESIGN.md |
+| Honest data limitation disclosure (proxy dataset, Rwanda features, synthetic NER training data) | **Done** | Documented in Notebooks 1/2/3, `RESEARCH_DESIGN.md`, and this checklist |
 
-**Target completion for missing items (July 20, 2026 deadline):**
-- ML benchmark experiment: July 12
-- Annotations + NER: July 14
+**Target completion for remaining items (July 20, 2026 thesis deadline — separate from any earlier Canvas milestone submission):**
+- Real NER annotation (Doccano) + Cohen's Kappa: in progress
+- Re-run XLM-R fine-tuning on real annotations: after the above
 - SUS session: July 17
 - Thesis write-up of results: July 19
 - Submission: July 20
+
+---
+
+## 13. Production deployment (Coolify)
+
+This section documents how this project is actually deployed and running
+in production, on a self-hosted VPS via [Coolify](https://coolify.io/) —
+a self-hosted alternative to Heroku/Railway that manages Docker builds,
+reverse-proxy/SSL, persistent storage, and scheduled jobs through a web
+dashboard. Live at **https://api.dukastock.oreste.dev**.
+
+### 13.1 Application resource
+
+- **Source**: this GitHub repo, branch `main`.
+- **Build Pack**: Dockerfile.
+- **Base Directory**: `backend` (the Dockerfile and `requirements.txt` live
+  there, not at the repo root — Coolify's Docker build context is set to
+  `backend/`, so `COPY . .` in the Dockerfile copies `backend/`'s contents
+  to the container's `/app`).
+- **Dockerfile Location**: `Dockerfile` (relative to the base directory).
+- **Port**: 8000.
+- The Dockerfile's `CMD` runs `alembic upgrade head && uvicorn app.main:app
+  --host 0.0.0.0 --port 8000` — migrations run automatically on every
+  deploy, before the server starts serving.
+
+### 13.2 Database and Redis
+
+Two separate Coolify-managed resources in the same project:
+- **PostgreSQL**: Coolify's built-in Postgres resource. Internal
+  connection string set as the app's `DATABASE_URL` environment variable.
+  **Important**: Coolify's generated URL uses the `postgres://` scheme,
+  which SQLAlchemy 2.0 no longer recognizes (`NoSuchModuleError`) —
+  `app/core/config.py`'s `Settings` normalizes `postgres://` to
+  `postgresql://` automatically via a field validator, so this isn't a
+  manual step, just worth knowing why it's there.
+- **Redis**: Coolify's built-in Redis resource, for USSD session state
+  (`REDIS_URL`).
+
+### 13.3 Environment variables
+
+Set directly in the Application's **Environment Variables** tab (never
+committed): `ENVIRONMENT=production`, `DATABASE_URL`, `REDIS_URL`, and a
+real random `PHONE_HASH_SALT` (the app refuses to start with the
+placeholder value outside `ENVIRONMENT=development` — see Section 12).
+Twilio/Africa's Talking credentials go here too, once you have real ones.
+
+### 13.4 Persistent storage for large model artifacts
+
+`ml_experiments/artifacts/*.joblib` (forecast models) and
+`backend/app/nlp/xlmr_commerce_ner/*` (the fine-tuned NER model,
+~1.1GB) are gitignored — too large to commit, and legitimately
+environment-specific. Both are baked into the image path via `COPY . .`
+by default, which means they'd be lost on every rebuild unless mounted as
+**persistent storage** (Application → **Persistent Storage** → **+ Add →
+Directory Mount**):
+
+| Mount | Destination (in container) | Source (on host) |
+|---|---|---|
+| Forecast artifacts | `/app/ml_experiments/artifacts` | `/data/coolify/dukastock-artifacts` |
+| NER model | `/app/app/nlp/xlmr_commerce_ner` | `/data/coolify/dukastock-ner-model` |
+
+(Destination is `/app/app/...` not `/app/...` for the NER mount — see
+13.1's note on the Docker build context.)
+
+After adding a mount, **Redeploy** once to create the host directory (it's
+empty at this point — the app falls back to "no model"/RapidFuzz until
+files are actually uploaded).
+
+### 13.5 Uploading model artifacts
+
+From a machine with SSH access to the VPS:
+
+```bash
+# Forecast models (after running run_experiment.py or
+# ml_experiments/scripts/serialize_from_results.py locally)
+scp ml_experiments/artifacts/*.joblib root@<vps-ip>:/data/coolify/dukastock-artifacts/
+
+# Fine-tuned NER model (after running train_xlmr_ner.py or Notebook 3)
+scp -r backend/app/nlp/xlmr_commerce_ner/* root@<vps-ip>:/data/coolify/dukastock-ner-model/
+```
+
+**Forecast models** are picked up on the next request with no restart
+needed — `ForecastService` checks the filesystem lazily per request (see
+`app/services/forecast_service.py`).
+
+**The NER model needs a container restart** (Coolify → **Restart**, not a
+full Redeploy/rebuild) — `CommerceNERPipeline` loads the model once at
+process startup (`app/nlp/ner_pipeline.py`), so files appearing in the
+mount after the process has already started aren't picked up until the
+next restart.
+
+### 13.6 Scheduled jobs (personalized forecast retraining)
+
+`backend/scripts/train_personalized_forecasts.py` (Section on
+personalized forecasting, checklist above) needs to run periodically —
+there's no APScheduler/Celery in this project, by design (see the script's
+own docstring). Coolify's **Scheduled Tasks** feature runs an arbitrary
+shell command against the running container on a cron schedule:
+
+- Command: `python scripts/train_personalized_forecasts.py`
+- Schedule: e.g. nightly, `0 2 * * *`
+
+### 13.7 Domain and HTTPS
+
+Application → **Domains** → custom domain, e.g.
+`api.dukastock.oreste.dev`. Coolify auto-provisions a Let's Encrypt
+certificate via its built-in reverse proxy — no separate nginx/certbot
+setup needed.
+
+### 13.8 Verifying a deployment
+
+```bash
+curl https://api.dukastock.oreste.dev/api/v1/health
+# {"status":"ok","service":"dukastock-backend"}
+
+curl https://api.dukastock.oreste.dev/api/v1/forecast/SUGAR
+# real model_used (e.g. "xgboost"), not "no_model"
+
+curl -X POST https://api.dukastock.oreste.dev/api/v1/webhooks/whatsapp \
+  -d "From=whatsapp%3A%2B250788999001" \
+  -d "Body=Nabagurishije+isukari+ibiro+bitatu"
+# TwiML response confirming a parsed sale
+```
+
+Check Coolify's **Logs** tab for `xlmr_model_loaded` (not
+`xlmr_load_failed` or `xlmr_model_not_found_using_fallback_only`) to
+confirm the NER model specifically is active rather than falling back to
+RapidFuzz.

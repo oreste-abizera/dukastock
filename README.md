@@ -6,6 +6,31 @@ delivered via WhatsApp, USSD, and SMS through a single shared backend.
 Capstone project — BSc. Software Engineering (Machine Learning), African
 Leadership University, Kigali. Supervisor: Hubert Apana.
 
+## Deployed version
+
+**Live at: https://api.dukastock.oreste.dev** — health check:
+`GET /api/v1/health`, interactive API docs: `/docs`. Deployed on a
+self-hosted VPS via Coolify; see `RUNBOOK.md` Section 13 for the full
+deployment writeup.
+
+## Demo video
+
+**TODO**: add the ~5-minute walkthrough video link here once recorded.
+Focus on core functionality (WhatsApp sale logging via the fine-tuned
+NER model, USSD menu including sales history and language switching, a
+forecast lookup) — there's no signup/login flow in this system to skip,
+since shopkeepers are identified by phone number across USSD/WhatsApp.
+
+## Testing results & analysis
+
+- [`docs/TESTING_RESULTS.md`](docs/TESTING_RESULTS.md) — testing evidence
+  across different strategies, data values, and hardware/software
+  environments.
+- [`docs/ANALYSIS_DISCUSSION_RECOMMENDATIONS.md`](docs/ANALYSIS_DISCUSSION_RECOMMENDATIONS.md)
+  — analysis, discussion, and recommendations (**confirm with your
+  supervisor whether this needs to be written up or is assessed in
+  conversation** — see the note at the top of that file).
+
 **New to this repo? Start with [`RUNBOOK.md`](RUNBOOK.md)** — a complete,
 numbered walkthrough from an empty machine to a running system, including
 the test suite, the notebooks, real data collection, and model training.
@@ -48,13 +73,16 @@ dukastock/
 │       ├── nlp/            XLM-R + RapidFuzz commerce NER pipeline
 │       ├── channels/       whatsapp/, ussd/ (FSM), sms/
 │       └── api/v1/         router (5 endpoints)
-│   └── tests/unit/        73 tests covering metrics, security, features, models, NLP, FSM
+│   └── tests/unit/        97 tests covering metrics, security, features, models, NLP, FSM, personalized forecasting
 ├── ml_experiments/
 │   ├── scripts/            run_experiment.py (CLI benchmark), train_xlmr_ner.py
 │   ├── notebooks/          4 Kaggle-ready Jupyter notebooks (see below)
 │   ├── data/                place Kaggle train.csv here
 │   └── results/             experiment JSON output lands here
 ├── docs/                   ARCHITECTURE.md, RESEARCH_DESIGN.md, SOURCES.md, ANNOTATION_GUIDE.md, SUS_QUESTIONNAIRE.md
+│   ├── TESTING_RESULTS.md   Testing evidence (strategies, data values, hardware/software)
+│   ├── ANALYSIS_DISCUSSION_RECOMMENDATIONS.md
+│   ├── screenshots/          Screenshot evidence referenced from TESTING_RESULTS.md
 │   └── diagrams/            Figures 2, 4, 5, 6, 7 (architecture, use case, class, ER, sequence) as SVG + PNG
 ├── .github/workflows/ci.yml
 ├── docker-compose.yml
