@@ -36,6 +36,16 @@ def get_or_create_shopkeeper(db: Session, raw_phone: str, channel: ChannelEnum) 
     return shopkeeper
 
 
+def get_recent_sales(db: Session, shopkeeper_id: str, limit: int = 3) -> list[SalesLog]:
+    return (
+        db.query(SalesLog)
+        .filter(SalesLog.shopkeeper_id == shopkeeper_id)
+        .order_by(SalesLog.logged_at.desc())
+        .limit(limit)
+        .all()
+    )
+
+
 def record_sale(
     db: Session,
     raw_phone: str,
