@@ -77,3 +77,52 @@ def test_forecast_handles_horizon_mismatch_gracefully(artifact_dir, tmp_path):
     result = service.forecast("SOAP", horizon_days=14)  # model trained for 7
     assert "horizon_mismatch" in result["model_used"]
     assert result["predicted_quantity"] == 0.0
+
+
+def test_forecast_for_shopkeeper_falls_back_to_global_when_no_personalized_artifact(artifact_dir, tmp_path):
+    global_model = SerializableForecastModel(kind="naive", model=NaiveBaseline().fit(pd.Series([10.0] * 7)))
+    joblib.dump(global_model, tmp_path / "sugar_best_model.joblib")
+
+    service = ForecastService(artifact_dir=artifact_dir)
+    result = service.forecast_for_shopkeeper("shopkeeper-1", "SUGAR", horizon_days=7)
+
+    assert result["model_used"] == "naive"
+    assert result["predicted_quantity"] == 70.0
+
+
+def test_forecast_for_shopkeeper_prefers_personalized_artifact(artifact_dir, tmp_path):
+    joblib.dump(
+        SerializableForecastModel(kind="naive", model=NaiveBaseline().fit(pd.Series([10.0] * 7))),
+        tmp_path / "sugar_best_model.joblib",
+    )
+    personalized_dir = tmp_path / "personalized"
+    personalized_dir.mkdir()
+    joblib.dump(
+        SerializableForecastModel(kind="naive", model=NaiveBaseline().fit(pd.Series([50.0] * 7))),
+        personalized_dir / "shopkeeper-1_sugar_best_model.joblib",
+    )
+
+    service = ForecastService(artifact_dir=artifact_dir)
+    result = service.forecast_for_shopkeeper("shopkeeper-1", "SUGAR", horizon_days=7)
+
+    assert result["predicted_quantity"] == 350.0  # 50 * 7, not the global model's 10 * 7
+
+
+def test_forecast_for_shopkeeper_caches_are_bounded_and_evict_oldest(artifact_dir, tmp_path):
+    personalized_dir = tmp_path / "personalized"
+    personalized_dir.mkdir()
+    service = ForecastService(artifact_dir=artifact_dir)
+    from app.services.forecast_service import _MAX_PERSONALIZED_CACHE_ENTRIES
+    service._personalized_cache["evict-me"] = "placeholder"  # inserted first -> oldest
+    for i in range(_MAX_PERSONALIZED_CACHE_ENTRIES - 1):
+        service._personalized_cache[f"key-{i}"] = "placeholder"
+    assert len(service._personalized_cache) == _MAX_PERSONALIZED_CACHE_ENTRIES  # cache is exactly at cap
+
+    joblib.dump(
+        SerializableForecastModel(kind="naive", model=NaiveBaseline().fit(pd.Series([1.0] * 7))),
+        personalized_dir / "shopkeeper-new_sugar_best_model.joblib",
+    )
+    service.forecast_for_shopkeeper("shopkeeper-new", "SUGAR", horizon_days=7)
+
+    assert "evict-me" not in service._personalized_cache
+    assert len(service._personalized_cache) == _MAX_PERSONALIZED_CACHE_ENTRIES

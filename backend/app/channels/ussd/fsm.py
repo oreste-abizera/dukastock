@@ -198,7 +198,7 @@ def handle_ussd_request(db: Session, session_id: str, phone_number: str, text: s
                 text=_t(locale, "product_not_found") + " " + _t(locale, "product_menu"), continue_session=True
             )
         product_code, unit = PRODUCT_MENU[last_input]
-        forecast = _forecast_service.forecast(product_code)
+        forecast = _forecast_service.forecast_for_shopkeeper(shopkeeper.uuid, product_code)
         clear_ussd_session(session_id)
         _persist_ussd_session_record(db, session_id, shopkeeper.uuid, USSDState.DONE.value)
         qty = forecast.get("predicted_quantity")

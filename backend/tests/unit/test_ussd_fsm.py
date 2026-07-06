@@ -112,3 +112,20 @@ def test_main_menu_renders_in_english_once_locale_is_english(mock_save, mock_loa
     db.get.return_value.locale = "english"
     response = handle_ussd_request(db, session_id="sess1", phone_number="+250788123456", text="")
     assert "Welcome to DukaStock" in response.text
+
+
+@patch("app.channels.ussd.fsm._forecast_service")
+@patch("app.channels.ussd.fsm.clear_ussd_session")
+@patch("app.channels.ussd.fsm.load_ussd_session", return_value={"state": "FORECAST_SELECT_PRODUCT"})
+@patch("app.channels.ussd.fsm.save_ussd_session")
+def test_selecting_forecast_product_uses_personalized_forecast(mock_save, mock_load, mock_clear, mock_service):
+    db = MagicMock()
+    db.get.return_value.locale = "kinyarwanda"
+    db.get.return_value.uuid = "shopkeeper-uuid-123"
+    mock_service.forecast_for_shopkeeper.return_value = {"predicted_quantity": 42.0}
+
+    response = handle_ussd_request(db, session_id="sess1", phone_number="+250788123456", text="2*1")
+
+    mock_service.forecast_for_shopkeeper.assert_called_once_with("shopkeeper-uuid-123", "SUGAR")
+    assert response.continue_session is False
+    assert "42" in response.text

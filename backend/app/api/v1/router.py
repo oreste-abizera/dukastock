@@ -55,7 +55,12 @@ def ussd_webhook(
 
 
 @router.get("/forecast/{product_code}")
-def get_forecast(product_code: str, horizon_days: int | None = None):
+def get_forecast(product_code: str, horizon_days: int | None = None, shopkeeper_id: str | None = None):
+    # shopkeeper_id is the already-hashed ShopkeeperProfile.uuid, never a raw
+    # phone number -- same privacy handling as POST /sales below, since a
+    # GET query param lands in access logs unlike a POST body field.
+    if shopkeeper_id:
+        return _forecast_service.forecast_for_shopkeeper(shopkeeper_id, product_code.upper(), horizon_days)
     return _forecast_service.forecast(product_code.upper(), horizon_days)
 
 

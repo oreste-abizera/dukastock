@@ -44,7 +44,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "backend"))
 from app.ml.evaluation.metrics import compute_all_metrics, diebold_mariano_test  # noqa: E402
 from app.ml.models.naive import NaiveBaseline  # noqa: E402
 from app.ml.models.serializable import SerializableForecastModel  # noqa: E402
-from app.ml.models.xgboost_model import XGBoostDemandModel, add_lag_features  # noqa: E402
+from app.ml.models.xgboost_model import (  # noqa: E402
+    XGBoostDemandModel, add_lag_features, build_future_feature_template,
+)
 from app.ml.pipeline.cold_start import DENSITY_LEVELS, temporal_density_slice, walk_forward_folds  # noqa: E402
 from app.ml.pipeline.rwanda_features import FMCG_PRODUCT_MAP, add_rwanda_features, subset_fmcg_products  # noqa: E402
 
@@ -238,27 +240,7 @@ def _select_and_serialize_best_model(
 
     elif best_kind == "xgboost":
         fitted = XGBoostDemandModel().fit(product_df)
-        # Build a future feature template covering the next `horizon` days
-        # past the end of the training data, so predict_next() has
-        # calendar/seasonal features ready without needing the caller to
-        # supply them at request time.
-        future_dates = pd.date_range(dates_full.max() + pd.Timedelta(days=1), periods=horizon, freq="D")
-        # Use np.nan, not None/Python-list-of-None: concatenating a column
-        # of bare Nones degrades the whole 'sales' column (and therefore
-        # every lag_* column derived from it) to object dtype, which XGBoost
-        # rejects outright at predict time. np.nan keeps it float64.
-        future_template = pd.DataFrame({"date": future_dates, "sales": np.full(horizon, np.nan)})
-        future_template = add_rwanda_features(future_template)
-        # XGBoost's lag features need real history immediately preceding
-        # the forecast window; stitch training tail + future template so
-        # add_lag_features can compute lag_7d/14d/28d correctly, then slice back
-        # to just the future rows.
-        combined = pd.concat([product_df, future_template], ignore_index=True)
-        combined["sales"] = combined["sales"].astype(float)
-        combined = add_lag_features(combined)
-        future_with_lags = combined.iloc[-horizon:].copy()
-        for lag_col in ("lag_7d", "lag_14d", "lag_28d"):
-            future_with_lags[lag_col] = future_with_lags[lag_col].astype(float)
+        future_with_lags = build_future_feature_template(product_df, horizon)
         wrapped = SerializableForecastModel(kind="xgboost", model=fitted, future_feature_template=future_with_lags)
 
     elif best_kind == "nbeats" and _NBEATS_AVAILABLE:

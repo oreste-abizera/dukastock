@@ -60,6 +60,36 @@ def add_lag_features(df: pd.DataFrame, target_col: str = "sales") -> pd.DataFram
     return out
 
 
+def build_future_feature_template(product_df: pd.DataFrame, horizon: int) -> pd.DataFrame:
+    """Build the future calendar/lag feature rows XGBoost needs at predict
+    time, for the `horizon` days immediately following `product_df`'s last
+    date. Stitches the training tail onto the future date range first so
+    lag_7d/14d/28d are computed from real history, then slices back to just
+    the future rows -- shared by the offline experiment script
+    (ml_experiments/scripts/run_experiment.py) and the live per-shopkeeper
+    training path so this fiddly stitching logic exists in exactly one
+    place."""
+    from app.ml.pipeline.rwanda_features import add_rwanda_features  # local import:
+    # keeps this the one model module with a pipeline dependency, rather than
+    # a module-level import the other four model classes don't need.
+
+    dates_full = product_df["date"]
+    future_dates = pd.date_range(dates_full.max() + pd.Timedelta(days=1), periods=horizon, freq="D")
+    # Use np.nan, not None/Python-list-of-None: concatenating a column
+    # of bare Nones degrades the whole 'sales' column (and therefore
+    # every lag_* column derived from it) to object dtype, which XGBoost
+    # rejects outright at predict time. np.nan keeps it float64.
+    future_template = pd.DataFrame({"date": future_dates, "sales": np.full(horizon, np.nan)})
+    future_template = add_rwanda_features(future_template)
+    combined = pd.concat([product_df, future_template], ignore_index=True)
+    combined["sales"] = combined["sales"].astype(float)
+    combined = add_lag_features(combined)
+    future_with_lags = combined.iloc[-horizon:].copy()
+    for lag_col in ("lag_7d", "lag_14d", "lag_28d"):
+        future_with_lags[lag_col] = future_with_lags[lag_col].astype(float)
+    return future_with_lags
+
+
 class XGBoostDemandModel:
     def __init__(self, use_grid_search: bool = True, param_grid: dict | None = None, **xgb_kwargs):
         self.use_grid_search = use_grid_search
