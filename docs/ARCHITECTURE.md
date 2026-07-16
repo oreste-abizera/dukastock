@@ -6,7 +6,7 @@ copy for viewing directly in a terminal or plain-text editor.
 
 ## Overview
 
-A single FastAPI backend serves three channels through one shared
+A single FastAPI backend serves three channels through a shared NLP and
 forecasting pipeline:
 
 ```

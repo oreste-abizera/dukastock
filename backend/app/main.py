@@ -20,7 +20,10 @@ logger = get_logger(__name__)
 
 app = FastAPI(
     title=settings.app_name,
-    description="ML-powered FMCG demand forecasting for informal Rwandan micro-retailers.",
+    description=(
+        "Understands how Rwandan Duka shopkeepers text about their sales "
+        "(Kinyarwanda-English commerce NER) and forecasts demand around it."
+    ),
     version="1.0.0",
 )
 

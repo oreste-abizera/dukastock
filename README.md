@@ -1,7 +1,8 @@
 # DukaStock
 
-ML-powered FMCG demand forecasting for informal Rwandan micro-retailers,
-delivered via WhatsApp, USSD, and SMS through a single shared backend.
+Teaching a language model to understand how Rwandan Duka shopkeepers
+actually text about their sales — with demand forecasting and a
+three-channel delivery system (WhatsApp, USSD, SMS) built around it.
 
 Capstone project — BSc. Software Engineering (Machine Learning), African
 Leadership University, Kigali. Supervisor: Hubert Apana.
