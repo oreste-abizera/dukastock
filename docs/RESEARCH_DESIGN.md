@@ -6,20 +6,29 @@ discoverable directly from the codebase, not only from the Word document.
 
 ## Primary research question
 
+How accurately does a fine-tuned XLM-R model extract product names and
+quantities from informal English-Kinyarwanda code-switched commerce
+messages compared to a rule-based RapidFuzz baseline, measured by
+precision, recall, and F1 on a 200-message annotated test set with
+reported Cohen's Kappa?
+
+**Status as of this report**: data collection is complete (200 real
+messages collected directly from Duka shopkeepers). Entity-span
+annotation in Doccano is in progress (26/200, 13%, as of 2026-07-06). The
+full precision/recall/F1/Cohen's Kappa result on the real annotated set is
+pending completion of annotation; this section will be updated once
+available. The pipeline itself (fine-tuning, serialization, serving, live
+WhatsApp delivery) is already verified working end-to-end, on the
+synthetic placeholder set, ahead of the real result.
+
+## Secondary research question
+
 Across SARIMA, Prophet, XGBoost, and N-BEATS, at what minimum data density
 does each model class first achieve statistically significant improvement
 over a naive last-week-sales baseline (p < 0.05, Diebold-Mariano test with
 Newey-West HAC variance correction for h = 7), evaluated at the individual
 store (single-Duka proxy) level, when trained under simulated cold-start
 conditions on a Rwanda-localized formal retail benchmark dataset?
-
-## Secondary research question
-
-How accurately does a fine-tuned XLM-R model extract product names and
-quantities from informal English-Kinyarwanda code-switched commerce
-messages compared to a rule-based RapidFuzz baseline, measured by
-precision, recall, and F1 on a 200-message annotated test set with
-reported Cohen's Kappa?
 
 ## Tertiary research question
 
@@ -169,3 +178,25 @@ reasoned decisions made during implementation, not oversights.
    figure (e.g. a cited source the supervisor prefers) — this has not been
    done automatically in either direction, since it changes a stated fact
    in the proposal text itself.
+
+3. **The NLP research question (originally secondary) is now designated
+   primary, and the forecasting question (originally primary) is now
+   secondary.** This reverses the ordering in the original approved
+   proposal. Cleared with the supervisor (Hubert Apana) ahead of the final
+   report. Reasoning for the thesis introduction/methodology section:
+
+   > The WhatsApp channel's natural-language understanding is the
+   > system's most immediately legible contribution — a shopkeeper
+   > interacting with free-text Kinyarwanda/English commerce messages,
+   > with no menu or form to learn, is the clearest illustration of why
+   > this project's approach differs from existing demand-forecasting
+   > tools. Elevating it to the primary research question better reflects
+   > where the project's emphasis and novelty lie.
+
+   Note for the written report: at the time of this reordering, the
+   primary question's own real-data result (precision/recall/F1/Kappa on
+   the real annotated set) is still in progress — see the "Status as of
+   this report" note under the Primary research question above. The
+   secondary (forecasting) question is the one with a complete, fully
+   evaluated result already operationalized in the deployed system.
+   Both facts should be stated plainly in the report rather than implied.

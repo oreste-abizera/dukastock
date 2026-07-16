@@ -2,7 +2,30 @@
 
 ## Analysis
 
-### RQ1 — Cold-start density thresholds (forecasting)
+### RQ1 — XLM-R vs. RapidFuzz NER (primary)
+
+Two hundred real messages were collected directly from Duka shopkeepers
+(`ml_experiments/data/Kinyarwanda Shopkeeper Dataset.xlsx`, plain-text
+extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`) and
+entity-span annotation (PRODUCT/QUANTITY/UNIT) is underway in Doccano per
+`docs/ANNOTATION_GUIDE.md` — 26 of 200 messages (13%) fully labeled as of
+this report. The resulting precision/recall/F1/Cohen's Kappa comparison
+against RapidFuzz on the completed real set is the one research result
+not yet available.
+
+What has been demonstrated is that the full pipeline works correctly
+end-to-end: XLM-R was fine-tuned (on the synthetic placeholder set, since
+real annotations aren't ready yet), deployed to production, and verified
+live against a real WhatsApp message — correctly extracting two separate
+product/quantity/unit triples from a single code-switched sentence
+("Nabagurishije isukari ibiro bitatu namavuta litre imwe" → SUGAR 3 kg
+and OIL 1 litre), something the RapidFuzz baseline is architecturally
+incapable of by design (it only ever returns one product per message).
+This confirms the training → serialization → serving → channel-delivery
+chain is sound; what remains is re-running that same, already-verified
+pipeline against the real annotated set once it exists.
+
+### RQ2 — Cold-start density thresholds (forecasting, secondary)
 
 The density × model benchmark (`ml_experiments/results/ml_benchmark_results.csv`,
 walk-forward cross-validation with a Newey-West-corrected Diebold-Mariano
@@ -38,30 +61,10 @@ with calendar/holiday features), not real Duka transaction data — this
 limitation is disclosed in full in `docs/RESEARCH_DESIGN.md` and was a
 deliberate, reasoned scope decision given the impracticality of
 collecting multi-year real transaction histories from informal retailers
-within the project timeline, not an oversight.
-
-### RQ2 — XLM-R vs. RapidFuzz NER
-
-Two hundred real messages were collected directly from Duka shopkeepers
-(`ml_experiments/data/Kinyarwanda Shopkeeper Dataset.xlsx`, plain-text
-extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`) and
-entity-span annotation (PRODUCT/QUANTITY/UNIT) is underway in Doccano per
-`docs/ANNOTATION_GUIDE.md` — 26 of 200 messages (13%) fully labeled as of
-this submission. The resulting precision/recall/F1/Cohen's Kappa
-comparison against RapidFuzz on the completed real set is the one
-research result not yet available.
-
-What has been demonstrated is that the full pipeline works correctly
-end-to-end: XLM-R was fine-tuned (on the synthetic placeholder set, since
-real annotations aren't ready yet), deployed to production, and verified
-live against a real WhatsApp message — correctly extracting two separate
-product/quantity/unit triples from a single code-switched sentence
-("Nabagurishije isukari ibiro bitatu namavuta litre imwe" → SUGAR 3 kg
-and OIL 1 litre), something the RapidFuzz baseline is architecturally
-incapable of by design (it only ever returns one product per message).
-This confirms the training → serialization → serving → channel-delivery
-chain is sound; what remains is re-running that same, already-verified
-pipeline against the real annotated set once it exists.
+within the project timeline, not an oversight. Despite being secondary,
+this is currently the project's most complete, fully-evaluated result —
+worth stating plainly alongside RQ1's still-pending real-data result
+above, rather than letting the primary/secondary labels imply otherwise.
 
 ### RQ3 — SUS usability
 
@@ -76,7 +79,7 @@ and administration protocol are all prepared and ready
 ## Discussion
 
 The most significant outcome of this milestone is that the offline
-research finding (RQ1's significance-gated model selection) is no longer
+research finding (RQ2's significance-gated model selection) is no longer
 confined to a notebook — it's the exact rule the live, deployed system
 uses to decide what to tell a real shopkeeper, at both the global and the
 per-shopkeeper personalized level. That distinction matters because it

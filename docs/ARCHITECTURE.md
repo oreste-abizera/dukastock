@@ -74,7 +74,7 @@ this build (see `docs/SOURCES.md`) confirms the correct figure is **14**.
 The codebase (`app/ml/pipeline/rwanda_features.py`) implements all 14
 correctly; the final written proposal document should be updated to match.
 
-## Data flow for the primary research question
+## Data flow for the secondary research question (forecasting benchmark)
 
 1. `ml_experiments/data/train.csv` (Kaggle Store Item Demand Forecasting
    Challenge, 913K rows) is loaded by Notebook 1, which subsets it to 5

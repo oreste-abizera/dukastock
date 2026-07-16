@@ -41,15 +41,17 @@ sector but keep zero digital sales records, so every published ML demand
 forecasting method — which assumes historical transaction data — is
 structurally unusable for them. This project:
 
-1. **Characterizes the minimum transaction history** at which four ML
+1. **Evaluates a fine-tuned XLM-R model** on a 200-message annotated
+   commerce-domain Kinyarwanda-English NER test set, comparing it against
+   a RapidFuzz rule-based baseline — the primary research question,
+   since natural-language understanding on the WhatsApp channel is the
+   project's most immediately legible contribution.
+2. **Characterizes the minimum transaction history** at which four ML
    model classes (SARIMA, Prophet, XGBoost, N-BEATS) first beat a naive
    baseline with statistical significance (Diebold-Mariano test, Newey-West
    HAC variance, p < 0.05), evaluated at the individual-store (Duka-proxy)
    level across six cold-start data density levels, using a Rwanda-localized
    version of the Kaggle Store Item Demand Forecasting Challenge benchmark.
-2. **Evaluates a fine-tuned XLM-R model** on a 200-message annotated
-   commerce-domain Kinyarwanda-English NER test set, comparing it against
-   a RapidFuzz rule-based baseline.
 3. **Delivers a working three-channel prototype** (WhatsApp via Twilio,
    USSD via Africa's Talking for MTN/Airtel Rwanda, outbound SMS) so the
    research has a usable interface, not just a results table.
