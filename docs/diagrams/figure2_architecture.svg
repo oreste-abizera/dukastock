@@ -59,20 +59,20 @@
   <text x="50" y="407" font-size="13" font-weight="bold" fill="#0d1f15">Database Layer</text>
 
   <rect x="50" y="420" width="430" height="65" rx="6" fill="#ffffff" stroke="#e65100" stroke-width="1.5"/>
-  <text x="265" y="443" text-anchor="middle" font-size="13" font-weight="bold">Supabase (PostgreSQL)</text>
+  <text x="265" y="443" text-anchor="middle" font-size="13" font-weight="bold">PostgreSQL (Coolify)</text>
   <text x="265" y="460" text-anchor="middle" font-size="10" fill="#455a64">Sales logs, shopkeeper profiles, forecast results</text>
   <text x="265" y="473" text-anchor="middle" font-size="10" fill="#bf360c">Phone numbers hashed to UUID (Law No. 058/2021)</text>
 
   <rect x="510" y="420" width="440" height="65" rx="6" fill="#ffffff" stroke="#e65100" stroke-width="1.5"/>
-  <text x="730" y="443" text-anchor="middle" font-size="13" font-weight="bold">Redis (Upstash)</text>
+  <text x="730" y="443" text-anchor="middle" font-size="13" font-weight="bold">Redis (Coolify)</text>
   <text x="730" y="460" text-anchor="middle" font-size="10" fill="#455a64">USSD session state persistence</text>
   <text x="730" y="473" text-anchor="middle" font-size="10" fill="#455a64">180-second TTL (matches MTN/Airtel timeout window)</text>
 
   <!-- Infrastructure layer -->
   <rect x="30" y="525" width="940" height="75" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
   <text x="50" y="547" font-size="13" font-weight="bold" fill="#0d1f15">Infrastructure</text>
-  <text x="50" y="568" font-size="11" fill="#455a64">Railway.app (always-on hosting — avoids Render.com's cold-start latency, which would breach USSD's 3-second response SLA)</text>
-  <text x="50" y="585" font-size="11" fill="#455a64">GitHub Actions CI on push to main (lint, 73 unit tests, Docker build; deploy to Railway is manual)</text>
+  <text x="50" y="568" font-size="11" fill="#455a64">Self-hosted VPS via Coolify (always-on hosting, Docker builds, Let's Encrypt TLS) — avoids managed-cloud cold-start latency, which would breach USSD's 3-second response SLA</text>
+  <text x="50" y="585" font-size="11" fill="#455a64">GitHub Actions CI on push to main (lint, 97 unit tests, Docker build); Coolify deploys on push via webhook</text>
 
   <!-- Arrows: frontend -> backend -->
   <line x1="185" y1="160" x2="185" y2="235" stroke="#37474f" stroke-width="1.5" marker-end="url(#arrow)"/>

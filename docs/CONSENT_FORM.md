@@ -68,8 +68,8 @@ This will take about 20-25 minutes in total.
   intervention. No real money or real sales are affected during the demo.
 - There is no guarantee of direct personal benefit. Your feedback may help
   improve tools for shopkeepers like you in the future.
-- As a token of appreciation for your time, you will receive [transport /
-  airtime — fill in the actual amount and form before printing].
+- As a token of appreciation for your time, you will receive 2,000 RWF in
+  airtime credit, sent to your phone.
 
 ### What happens to your information
 
@@ -160,8 +160,8 @@ Ibi byose bizamara hafi iminota 20-25.
 - Nta cyizigiro cy'akamaro butaziguye kuri wowe ubwawe. Ibitekerezo byawe
   bishobora gufasha guteza imbere ibikoresho by'abacuruzi nkawe mu gihe
   kizaza.
-- Nk'ikimenyetso cyo gushimira igihe cyawe, uzahabwa [amafaranga
-  y'urugendo/igihe cy'itumanaho — uzuza umubare nyawo mbere yo gucapa].
+- Nk'ikimenyetso cyo gushimira igihe cyawe, uzahabwa amafaranga 2,000 Frw
+  y'igihe cy'itumanaho (airtime), azoherezwa kuri telefoni yawe.
 
 ### Ibyerekeye amakuru yawe
 
