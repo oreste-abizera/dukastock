@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy &amp; EULA — DukaStock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFE0;
+    --paper-line: #DCD2B8;
+    --ink: #1E2A22;
+    --ink-soft: #4B5A50;
+    --ledger-green: #0B5C34;
+    --ledger-green-dark: #073F24;
+    --stamp-gold: #A9791E;
+    --card: #FBF8F0;
+    --max-w: 760px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--ledger-green-dark); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--ledger-green); outline-offset: 2px; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  header.topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(245, 239, 224, 0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--paper-line);
+    padding: 14px 24px;
+  }
+
+  .topbar-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .wordmark {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ledger-green-dark);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .topbar nav { display: flex; gap: 4px; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+  .topbar nav::-webkit-scrollbar { display: none; }
+
+  .toc-chip {
+    flex: 0 0 auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    white-space: nowrap;
+    background: var(--card);
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .toc-chip:hover, .toc-chip.active {
+    border-color: var(--ledger-green);
+    color: var(--ledger-green-dark);
+  }
+
+  main { max-width: var(--max-w); margin: 0 auto; padding: 0 24px 96px; }
+
+  .hero { padding: 56px 0 40px; }
+
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ledger-green-dark);
+    border: 1.5px solid var(--ledger-green);
+    border-radius: 3px;
+    padding: 5px 12px;
+    transform: rotate(-1.2deg);
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+
+  .hero p.lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin: 0 0 4px;
+  }
+
+  .updated {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 18px;
+  }
+
+  section.clause {
+    padding: 34px 0;
+    border-top: 1px solid var(--paper-line);
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+  }
+
+  .clause-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--stamp-gold);
+    padding-top: 4px;
+  }
+
+  .clause-body h2 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 10px;
+    color: var(--ink);
+    scroll-margin-top: 84px;
+  }
+
+  .clause-body p {
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+
+  .why {
+    background: var(--card);
+    border-left: 3px solid var(--stamp-gold);
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .why-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stamp-gold);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  footer {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--paper-line);
+  }
+
+  footer a { color: var(--ledger-green-dark); }
+
+  @media (max-width: 560px) {
+    section.clause { grid-template-columns: 1fr; gap: 8px; }
+    .clause-num { padding-top: 0; }
+    h1 { font-size: 27px; }
+    .hero { padding: 40px 0 28px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="index.html">DukaStock</a>
+    <nav aria-label="Jump to a clause">
+      <a class="toc-chip" href="#clause-01">01 Data</a>
+      <a class="toc-chip" href="#clause-03">03 Hashing</a>
+      <a class="toc-chip" href="#clause-04">04 AI training</a>
+      <a class="toc-chip" href="#clause-07">07 Your rights</a>
+      <a class="toc-chip" href="#clause-10">10 Accuracy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <h2 class="sr-only">DukaStock privacy policy and end-user license agreement, thirteen numbered clauses covering data collection, phone number hashing, AI training data, user rights, and service limitations.</h2>
+
+  <div class="hero">
+    <div class="stamp">DukaStock &middot; Kigali, Rwanda</div>
+    <h1>Privacy Policy &amp; End-User Agreement</h1>
+    <p class="lede">This is the ledger for how DukaStock handles your phone number, your sales messages, and the AI model built on top of them. Same as any ledger, every entry below is numbered and dated.</p>
+    <div class="updated">LAST UPDATED &nbsp;19 JUL 2026</div>
+  </div>
+
+  <section class="clause" id="clause-01">
+    <div class="clause-num">01</div>
+    <div class="clause-body">
+      <h2>What this policy covers</h2>
+      <p>This Agreement governs your use of DukaStock, a service that helps small Duka shopkeepers in Rwanda log sales through WhatsApp, USSD, and SMS. By sending a message to the DukaStock WhatsApp number, dialling the DukaStock USSD code, or otherwise using the service, you agree to the terms below.</p>
+      <div class="why"><span class="why-label">Why it's here</span>Most people using DukaStock never see a normal website or a terms screen. This page exists so a written version of those terms is somewhere, even if you only ever talk to DukaStock through a chat message.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-02">
+    <div class="clause-num">02</div>
+    <div class="clause-body">
+      <h2>What information we collect</h2>
+      <p>Your phone number, the content of your sales messages, the sales records you create through the service, and temporary USSD session data such as menu selections and language preference. We do not collect your name, location, national ID, or anything beyond a phone number and the transaction text you choose to send.</p>
+      <div class="why"><span class="why-label">Why it matters</span>You should be able to know exactly what leaves your phone. No more, no less.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-03">
+    <div class="clause-num">03</div>
+    <div class="clause-body">
+      <h2>How we protect your phone number</h2>
+      <p>Your phone number is hashed the moment it reaches our system, turned into a code nobody, including the person who built DukaStock, can reverse. No plaintext phone number is stored anywhere. This follows Rwanda's Law No. 058/2021 on the protection of personal data and privacy.</p>
+      <div class="why"><span class="why-label">Why it matters</span>Even if the database were ever exposed, your number could not be recovered from it.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-04">
+    <div class="clause-num">04</div>
+    <div class="clause-body">
+      <h2>How we use your information</h2>
+      <p>To log the sale you described, keep your USSD session working between key presses, and send optional weekly restock summaries by SMS. We do not sell your data. The messages used to train DukaStock's AI model came from a separate group of shopkeepers who gave verbal consent specifically for that research, before those particular messages were ever collected.</p>
+      <div class="why"><span class="why-label">Why it matters</span>Running your own sales log and training the AI model are two different things. This clause is here so that difference is never blurred into one blanket "we use your data."</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-05">
+    <div class="clause-num">05</div>
+    <div class="clause-body">
+      <h2>How long we keep your information</h2>
+      <p>Sales logs are kept for as long as you use the service. USSD session data is deleted automatically once your session times out. You can ask us to delete your sales history at any time.</p>
+      <div class="why"><span class="why-label">Why it matters</span>Data with no ongoing purpose gets deleted, not kept "just in case."</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-06">
+    <div class="clause-num">06</div>
+    <div class="clause-body">
+      <h2>Who we share information with</h2>
+      <p>Twilio delivers WhatsApp messages. Africa's Talking delivers USSD and SMS. Both only see a message in transit and have no access to the DukaStock database or your hashed identity.</p>
+      <div class="why"><span class="why-label">Why it matters</span>You should know which outside companies technically touch your message, even briefly.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-07">
+    <div class="clause-num">07</div>
+    <div class="clause-body">
+      <h2>Your rights</h2>
+      <p>You can ask what data we hold against your hashed identifier, request deletion of your sales history, stop using the service at any time with no penalty, and withdraw consent for your messages to be used in future research if you contributed to the original training data.</p>
+      <div class="why"><span class="why-label">Why it matters</span>Consent is not a one-time checkbox. You can change your mind later.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-08">
+    <div class="clause-num">08</div>
+    <div class="clause-body">
+      <h2>Children and vulnerable users</h2>
+      <p>DukaStock is built for adult shopkeepers running a business and is not directed at children. We do not knowingly collect data from minors.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-09">
+    <div class="clause-num">09</div>
+    <div class="clause-body">
+      <h2>License to use the service</h2>
+      <p>You're granted a limited right to use DukaStock to log your own retail sales. You agree not to submit false transaction data, not to try to access another shopkeeper's sales history, and not to use the service in a way that breaks Rwandan law.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-10">
+    <div class="clause-num">10</div>
+    <div class="clause-body">
+      <h2>No guarantee of perfect accuracy</h2>
+      <p>DukaStock's AI model extracts product, quantity, and unit information automatically, and it is not perfectly accurate, especially for products or phrasing outside its training data. When the model isn't confident, the system falls back to a simpler method instead of guessing. Check the confirmation message after each sale.</p>
+      <div class="why"><span class="why-label">Why it matters</span>Overstating how accurate an AI system is would be its own kind of dishonesty. This clause says plainly that mistakes are possible.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-11">
+    <div class="clause-num">11</div>
+    <div class="clause-body">
+      <h2>Service availability</h2>
+      <p>DukaStock is a capstone research project, self-hosted on a single production server. It is not guaranteed to run without interruption and may be modified or discontinued, particularly once the academic capstone period ends.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-12">
+    <div class="clause-num">12</div>
+    <div class="clause-body">
+      <h2>Changes to this policy</h2>
+      <p>If this policy changes in a way that affects how your data is handled, we'll make a reasonable effort to notify active users through the channel they already use: WhatsApp, USSD, or SMS.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-13">
+    <div class="clause-num">13</div>
+    <div class="clause-body">
+      <h2>Contact</h2>
+      <p>Questions, deletion requests, or concerns about this policy can be sent to <a href="mailto:o.abizera@alustudent.com">o.abizera@alustudent.com</a>.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  DukaStock &middot; Built for Rwanda's Duka shopkeepers &middot; <a href="index.html">Back to DukaStock</a>
+</footer>
+
+<script>
+  (function () {
+    var chips = document.querySelectorAll('.toc-chip');
+    var targets = Array.prototype.map.call(chips, function (c) {
+      return document.querySelector(c.getAttribute('href'));
+    });
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var idx = targets.indexOf(entry.target);
+        if (idx === -1) return;
+        if (entry.isIntersecting) {
+          chips.forEach(function (c) { c.classList.remove('active'); });
+          chips[idx].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    targets.forEach(function (t) { if (t) io.observe(t); });
+  })();
+</script>
+
+</body>
+</html>
