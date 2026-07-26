@@ -32,7 +32,7 @@
     <text x="800" y="82" fill="white">Service</text>
 
     <rect x="900" y="50" width="80" height="40" rx="5" fill="#37474f"/>
-    <text x="940" y="68" fill="white">Supabase</text>
+    <text x="940" y="68" fill="white">Postgres</text>
     <text x="940" y="82" fill="white">DB</text>
   </g>
 

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DukaStock — The sales ledger that understands Kinyarwanda</title>
+<meta name="description" content="DukaStock reads free-text sales messages in Kinyarwanda and English over WhatsApp, USSD, and SMS, and turns them into structured sales records. Live in production for Rwanda's Duka shops.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFE0;
+    --paper-line: #DCD2B8;
+    --ink: #1E2A22;
+    --ink-soft: #4B5A50;
+    --ledger-green: #0B5C34;
+    --ledger-green-dark: #073F24;
+    --stamp-gold: #A9791E;
+    --card: #FBF8F0;
+    --alert: #8C3A2B;
+    --max-w: 760px;
+    --max-w-wide: 980px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--ledger-green-dark); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--ledger-green); outline-offset: 2px; }
+  img { max-width: 100%; display: block; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  header.topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(245, 239, 224, 0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--paper-line);
+    padding: 14px 24px;
+  }
+
+  .topbar-inner {
+    max-width: var(--max-w-wide);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .wordmark {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ledger-green-dark);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .topbar nav { display: flex; gap: 4px; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+  .topbar nav::-webkit-scrollbar { display: none; }
+
+  .toc-chip {
+    flex: 0 0 auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    white-space: nowrap;
+    background: var(--card);
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .toc-chip:hover, .toc-chip.active {
+    border-color: var(--ledger-green);
+    color: var(--ledger-green-dark);
+  }
+  .toc-chip.privacy-chip {
+    border-color: var(--stamp-gold);
+    color: var(--stamp-gold);
+  }
+
+  main { max-width: var(--max-w-wide); margin: 0 auto; padding: 0 24px 40px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 64px 0 48px;
+    max-width: var(--max-w);
+  }
+
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ledger-green-dark);
+    border: 1.5px solid var(--ledger-green);
+    border-radius: 3px;
+    padding: 5px 12px;
+    transform: rotate(-1.2deg);
+    margin-bottom: 22px;
+  }
+  .stamp .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ledger-green);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 42px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+
+  .hero p.lede {
+    font-size: 18px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin: 0 0 28px;
+  }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-primary { background: var(--ledger-green-dark); color: var(--card); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(7,63,36,0.28); }
+  .btn-secondary { background: transparent; color: var(--ledger-green-dark); border: 1.5px solid var(--paper-line); }
+  .btn-secondary:hover { border-color: var(--ledger-green); }
+
+  .updated {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Clause sections (shared rhythm with the privacy page) ---------- */
+  section.clause {
+    padding: 40px 0;
+    border-top: 1px solid var(--paper-line);
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+  }
+
+  .clause-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--stamp-gold);
+    padding-top: 4px;
+  }
+
+  .clause-body h2 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0 0 14px;
+    color: var(--ink);
+    scroll-margin-top: 84px;
+  }
+
+  .clause-body > p { margin: 0 0 14px; max-width: 66ch; }
+
+  .why {
+    background: var(--card);
+    border-left: 3px solid var(--stamp-gold);
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 66ch;
+  }
+
+  .why-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stamp-gold);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* two-column layout for image + text clauses */
+  .split {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .split .figure { justify-self: center; }
+  .split .figure img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 440px;
+    border: 1px solid var(--paper-line);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(30, 42, 34, 0.12);
+  }
+  .figure-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  /* ---------- Steps ---------- */
+  .steps { list-style: none; margin: 0; padding: 0; max-width: 66ch; }
+  .steps li {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .step-marker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--card);
+    background: var(--ledger-green-dark);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps strong { color: var(--ink); }
+
+  /* ---------- Stat grid ---------- */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: var(--ledger-green-dark);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .stat-num.gold { color: var(--stamp-gold); }
+  .stat-num.alert { color: var(--alert); }
+  .stat-label {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .compare-row {
+    display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap;
+  }
+  .compare-col { flex: 1; min-width: 200px; }
+  .compare-col h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .compare-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+  .compare-bar-track { flex: 1; height: 8px; background: var(--paper-line); border-radius: 4px; overflow: hidden; }
+  .compare-bar-fill { height: 100%; border-radius: 4px; }
+
+  /* ---------- Tech grid ---------- */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 66ch;
+  }
+  .tech-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 9px 12px;
+    color: var(--ink);
+  }
+
+  /* ---------- Honesty callout (limitations, tone continuity with privacy page) ---------- */
+  .honest-box {
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    padding: 18px 20px;
+    max-width: 66ch;
+  }
+  .honest-box p { margin: 0 0 10px; font-size: 14.5px; }
+  .honest-box p:last-child { margin-bottom: 0; }
+
+  footer {
+    max-width: var(--max-w-wide);
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--paper-line);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer a { color: var(--ledger-green-dark); }
+  footer .foot-links { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .split { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    section.clause { grid-template-columns: 1fr; gap: 10px; }
+    .clause-num { padding-top: 0; }
+    h1 { font-size: 30px; }
+    .hero { padding: 44px 0 32px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="#top">DukaStock</a>
+    <nav aria-label="Jump to a section">
+      <a class="toc-chip" href="#clause-01">01 Problem</a>
+      <a class="toc-chip" href="#clause-02">02 How it works</a>
+      <a class="toc-chip" href="#clause-05">05 Results</a>
+      <a class="toc-chip" href="#clause-06">06 Under the hood</a>
+      <a class="toc-chip privacy-chip" href="privacy.html">Privacy →</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <h1 class="sr-only">DukaStock is an AI system that reads free-text Kinyarwanda and English sales messages over WhatsApp, USSD, and SMS, and turns them into structured sales records for Rwanda's Duka shops.</h1>
+
+  <div class="hero">
+    <div class="stamp"><span class="dot"></span>LIVE IN PRODUCTION &middot; KIGALI, RWANDA</div>
+    <h1>The sales ledger that understands Kinyarwanda.</h1>
+    <p class="lede">A shopkeeper texts what she sold, the way she'd text a friend. DukaStock reads it in Kinyarwanda, English, or both mixed together, and logs the sale. No form. No app to learn. No smartphone required.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://wa.me/14155238886?text=join%20eaten-addition" target="_blank" rel="noopener">Message DukaStock on WhatsApp →</a>
+      <a class="btn btn-secondary" href="https://github.com/oreste-abizera/dukastock" target="_blank" rel="noopener">View the code</a>
+    </div>
+    <div class="updated">STATUS &nbsp;api.dukastock.oreste.dev &middot; health-checked, self-hosted on Coolify</div>
+  </div>
+
+  <section class="clause" id="clause-01">
+    <div class="clause-num">01</div>
+    <div class="clause-body">
+      <h2>The problem</h2>
+      <p>Rwanda's informal Duka shops make up most of retail, and almost none of them keep digital sales records. Every demand-forecasting method in the research literature assumes years of clean transaction history. That assumption quietly falls apart here, because the sale was never recorded to begin with.</p>
+      <p>It also assumes a smartphone. 85% of Rwandan households own a mobile phone, but only 34% own a smartphone (NISR EICV7, 2023/24). A WhatsApp-only tool would exclude most of the people it's meant to serve.</p>
+      <div class="why"><span class="why-label">Why it matters</span>So DukaStock is built to reach a phone that already exists in a shopkeeper's pocket, not the phone a typical app assumes she has.</div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-02">
+    <div class="clause-num">02</div>
+    <div class="clause-body">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><span class="step-marker">1</span><div><strong>She sends a message.</strong> Over WhatsApp if she has a smartphone, over USSD by dialling a code on any phone, or SMS for a lightweight nudge, in Kinyarwanda, English, or a natural mix of both.</div></li>
+        <li><span class="step-marker">2</span><div><strong>A fine-tuned language model reads it.</strong> A cross-lingual model (XLM-R), fine-tuned specifically on real Duka-shop commerce messages, extracts the product, quantity, and unit. If it isn't confident, the system falls back to a conservative rule-based match instead of guessing.</div></li>
+        <li><span class="step-marker">3</span><div><strong>The sale is logged, instantly.</strong> She gets a confirmation back in the same channel she used, and the structured record is saved. No typing into a spreadsheet, no separate app.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-03">
+    <div class="clause-num">03</div>
+    <div class="clause-body split">
+      <div>
+        <h2>See it live</h2>
+        <p>This is a real conversation from DukaStock's production system. One message, two products. "Nabagurishije isukari ibiro bitatu namavuta litre imwe" (I sold three kilos of sugar and one litre of cooking oil) is split correctly into <strong>SUGAR, 3&nbsp;kg</strong> and <strong>OIL, 1&nbsp;litre</strong>, understood instantly.</p>
+        <div class="why"><span class="why-label">Why it's hard</span>A simple keyword-matching baseline can only ever return one product per message. This model was fine-tuned specifically so it doesn't have that limitation.</div>
+      </div>
+      <div class="figure">
+        <img src="assets/whatsapp.jpg" alt="Real WhatsApp conversation showing a shopkeeper's message being correctly parsed into two separate sales entries: sugar 3kg and oil 1 litre" width="900" height="962" loading="lazy">
+        <div class="figure-caption">Live production screenshot: WhatsApp via Twilio</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-04">
+    <div class="clause-num">04</div>
+    <div class="clause-body split">
+      <div class="figure">
+        <img src="assets/ussd-menu.jpg" alt="USSD menu screen on a basic feature phone, showing DukaStock's dial-in sales logging menu" width="614" height="1270" loading="lazy">
+        <div class="figure-caption">USSD menu &middot; works on any phone, no data connection</div>
+      </div>
+      <div>
+        <h2>Built for every phone, not just the smartphone</h2>
+        <p>34% smartphone. Roughly 51% feature-phone-only. About 15% no phone access at all. The same fine-tuned pipeline that powers WhatsApp runs behind USSD too, with zero changes to the model, reaching the majority of households a WhatsApp-only design would leave out.</p>
+        <div class="why"><span class="why-label">Being honest</span>This shows the pipeline is reusable across channels. It doesn't yet prove shopkeepers actually prefer USSD over WhatsApp. That's a real open question, not a settled one.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-05">
+    <div class="clause-num">05</div>
+    <div class="clause-body">
+      <h2>The numbers, not just the pitch</h2>
+      <p>Evaluated against a rule-based baseline (RapidFuzz) on the same held-out, real, annotated test set. The test set's own reliability was independently checked before either number was trusted.</p>
+
+      <div class="compare-row">
+        <div class="compare-col">
+          <h3>XLM-R (fine-tuned)</h3>
+          <div class="compare-bar-row"><span style="width:64px">Precision</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:95.3%;background:#0B5C34"></div></div><span>0.953</span></div>
+          <div class="compare-bar-row"><span style="width:64px">Recall</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:96.5%;background:#0B5C34"></div></div><span>0.965</span></div>
+          <div class="compare-bar-row"><span style="width:64px">F1</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:95.9%;background:#0B5C34"></div></div><span>0.959</span></div>
+        </div>
+        <div class="compare-col">
+          <h3>RapidFuzz (baseline)</h3>
+          <div class="compare-bar-row"><span style="width:64px">Precision</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:100%;background:#A9791E"></div></div><span>1.000</span></div>
+          <div class="compare-bar-row"><span style="width:64px">Recall</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:37.8%;background:#A9791E"></div></div><span>0.378</span></div>
+          <div class="compare-bar-row"><span style="width:64px">F1</span><div class="compare-bar-track"><div class="compare-bar-fill" style="width:54.9%;background:#A9791E"></div></div><span>0.549</span></div>
+        </div>
+      </div>
+      <p style="margin-top:18px;font-size:14px;color:var(--ink-soft);max-width:66ch;">RapidFuzz's 1.000 precision doesn't mean it's a strong model. It means every guess it made happened to be correct. Its recall, 0.378, is the honest number: it misses most entities because it can only ever return one product per message.</p>
+
+      <div class="stat-grid" style="margin-top:28px;">
+        <div class="stat-card"><span class="stat-num">200</span><span class="stat-label">real messages collected from Duka shopkeepers</span></div>
+        <div class="stat-card"><span class="stat-num gold">κ 0.951</span><span class="stat-label">inter-annotator agreement: "almost perfect"</span></div>
+        <div class="stat-card"><span class="stat-num">97/97</span><span class="stat-label">automated tests passing</span></div>
+        <div class="stat-card"><span class="stat-num gold">5</span><span class="stat-label">FMCG products in scope: sugar, oil, flour, rice, soap</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-06">
+    <div class="clause-num">06</div>
+    <div class="clause-body">
+      <h2>Under the hood</h2>
+      <p>One FastAPI backend serves both channels. WhatsApp arrives via Twilio; USSD and SMS arrive via Africa's Talking, since Africa's Talking doesn't offer WhatsApp in Rwanda. Every request is routed through the same backend, which hashes phone numbers on arrival, keeps session state in Redis, and stores sales in Postgres, then hands off to the same NLP pipeline: fine-tuned XLM-R first, with RapidFuzz as a conservative fallback whenever the model isn't confident enough.</p>
+      <div class="figure" style="margin-top:22px;">
+        <img src="assets/architecture.jpg" alt="System architecture diagram: WhatsApp and USSD channels both routing through a single FastAPI backend into the NLP pipeline, Postgres, and Redis" loading="lazy">
+        <div class="figure-caption">One backend, three channels, nobody left out</div>
+      </div>
+      <div class="tech-grid" style="margin-top:22px;">
+        <div class="tech-chip">FastAPI</div>
+        <div class="tech-chip">PostgreSQL + Redis</div>
+        <div class="tech-chip">Twilio (WhatsApp)</div>
+        <div class="tech-chip">Africa's Talking (USSD/SMS)</div>
+        <div class="tech-chip">XLM-RoBERTa (fine-tuned)</div>
+        <div class="tech-chip">RapidFuzz (fallback)</div>
+        <div class="tech-chip">Doccano (annotation)</div>
+        <div class="tech-chip">Docker + Coolify</div>
+        <div class="tech-chip">pytest + TestClient</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-07">
+    <div class="clause-num">07</div>
+    <div class="clause-body">
+      <h2>Verified live, not just demoed locally</h2>
+      <p>The deployment status, the API documentation, and the annotation progress below are real, current screenshots of the running system, not mockups.</p>
+      <div class="compare-row" style="margin-top:8px;">
+        <div class="figure" style="flex:1;min-width:260px;">
+          <img src="assets/coolify.jpg" alt="Coolify deployment dashboard showing DukaStock running and healthy" loading="lazy">
+          <div class="figure-caption">Coolify &middot; self-hosted VPS deployment</div>
+        </div>
+        <div class="figure" style="flex:1;min-width:260px;">
+          <img src="assets/swagger.jpg" alt="Swagger UI documentation for the DukaStock REST API" loading="lazy">
+          <div class="figure-caption">Live API docs &middot; api.dukastock.oreste.dev/docs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="clause" id="clause-08">
+    <div class="clause-num">08</div>
+    <div class="clause-body">
+      <h2>Built as honest research, not just a product pitch</h2>
+      <div class="honest-box">
+        <p>This is a capstone research project from African Leadership University, reviewed and approved by the ALU Research Ethics Committee before any shopkeeper message was collected. Phone numbers are hashed at ingestion under Rwanda's Law No. 058/2021 and never stored in plaintext.</p>
+        <p>It's also reported honestly, not just optimistically: the evaluation set is small (37 messages), a usability study with real shopkeepers hasn't been run yet, and the model's accuracy on phrasing outside its training data is untested. None of that changes the core result. It just marks where the evidence currently ends.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>DukaStock &middot; Fine-tuned cross-lingual NER for Rwanda's informal retail sector</div>
+  <div class="foot-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="https://github.com/oreste-abizera/dukastock" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://api.dukastock.oreste.dev/docs" target="_blank" rel="noopener">API Docs</a>
+    <a href="mailto:o.abizera@alustudent.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var chips = document.querySelectorAll('.toc-chip[href^="#"]');
+    var targets = Array.prototype.map.call(chips, function (c) {
+      return document.querySelector(c.getAttribute('href'));
+    });
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var idx = targets.indexOf(entry.target);
+        if (idx === -1) return;
+        if (entry.isIntersecting) {
+          chips.forEach(function (c) { c.classList.remove('active'); });
+          chips[idx].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    targets.forEach(function (t) { if (t) io.observe(t); });
+  })();
+</script>
+
+</body>
+</html>
