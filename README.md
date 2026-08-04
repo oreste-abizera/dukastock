@@ -108,8 +108,8 @@ For the full walkthrough with verification steps and troubleshooting, see
 [`RUNBOOK.md`](RUNBOOK.md). Condensed version:
 
 ```bash
-git clone <this-repo>
-cd <the-cloned-folder>   # named per your local clone/unzip, not necessarily "dukastock"
+git clone https://github.com/oreste-abizera/dukastock
+cd dukastock   # or whatever the extracted/cloned folder is named locally
 cp config/.env.example config/.env   # fill in Twilio/Africa's Talking sandbox keys
 docker-compose up --build
 ```

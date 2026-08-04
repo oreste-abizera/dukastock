@@ -86,15 +86,16 @@ service code end to end:
 
 200 real messages were collected directly from Duka shopkeepers and
 annotated span-by-span (PRODUCT/QUANTITY/UNIT) in Doccano, running
-locally per `docs/ANNOTATION_GUIDE.md`. **As of 2026-07-19, 183 of 200
-(91.5%) are complete** — the screenshots below are from the 2026-07-06
-session and show 26/200 (13%); they are kept for the annotation-editor UI
-reference but the progress number in them is stale. Recapture before
-final submission if an up-to-date progress screenshot is needed.
+locally per `docs/ANNOTATION_GUIDE.md`. **183 of 200 (91.5%) are
+annotated and complete.** The screenshots below are from the 2026-07-06
+session (26/200, 13% shown in the progress panel) and are kept as
+annotation-editor UI evidence; the final annotated count used for
+XLM-R fine-tuning is 183 messages (146 train / 37 eval split,
+~18.2-minute training run on Apple Silicon CPU).
 
 ![Doccano dataset view: the 200 real collected messages imported, with several already marked Finished](screenshots/doccano_dataset_progress.png)
 
-![Doccano annotation editor: message 1 of 200 with PRODUCT/QUANTITY/UNIT spans labeled — progress panel shown is from 2026-07-06 (26/200, 13%); real progress as of 2026-07-19 is 183/200 (91.5%)](screenshots/doccano_annotation_editor.png)
+![Doccano annotation editor: message 1 of 200 with PRODUCT/QUANTITY/UNIT spans labeled — progress panel shown is from 2026-07-06 (26/200, 13%); final annotated set used for model training is 183/200 (91.5%)](screenshots/doccano_annotation_editor.png)
 
 ---
 

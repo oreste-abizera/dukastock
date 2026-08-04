@@ -33,12 +33,12 @@ Talking account), that is stated explicitly rather than implied.
 ## 1. Get the code
 
 ```bash
-unzip DukaStock_Capstone_Project.zip
-cd DukaStock_Capstone_Project   # or whatever the extracted/cloned folder is named locally
+git clone https://github.com/oreste-abizera/dukastock
+cd dukastock
 ```
 
-(Or `git clone` if you've pushed this to a repository instead of working
-from the zip.)
+(Or `unzip DukaStock_Capstone_Project.zip && cd DukaStock_Capstone_Project` if
+working from the zip submission.)
 
 ---
 
