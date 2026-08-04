@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+
 # pyrefly: ignore [missing-import]
 from prophet import Prophet
 
@@ -49,7 +50,7 @@ class ProphetModel:
     def __init__(self):
         self.model: Prophet | None = None
 
-    def fit(self, dates: pd.Series, y: pd.Series) -> "ProphetModel":
+    def fit(self, dates: pd.Series, y: pd.Series) -> ProphetModel:
         years = sorted(pd.to_datetime(dates).dt.year.unique().tolist())
         # Extend one year past the observed range so the model has holiday
         # rows available for the forecast horizon too.

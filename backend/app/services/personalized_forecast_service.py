@@ -21,6 +21,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -28,7 +29,11 @@ from app.core.logging import get_logger
 from app.ml.evaluation.metrics import diebold_mariano_test
 from app.ml.models.naive import NaiveBaseline
 from app.ml.models.serializable import SerializableForecastModel
-from app.ml.models.xgboost_model import XGBoostDemandModel, add_lag_features, build_future_feature_template
+from app.ml.models.xgboost_model import (
+    XGBoostDemandModel,
+    add_lag_features,
+    build_future_feature_template,
+)
 from app.ml.pipeline.cold_start import walk_forward_folds
 from app.ml.pipeline.rwanda_features import add_rwanda_features
 from app.models.orm import ForecastResult
@@ -81,7 +86,7 @@ def train_for_shopkeeper(db: Session, shopkeeper_id: str, product_code: str, art
                     pd.concat([train, test]).reset_index(drop=True)
                 ).iloc[-len(test):]
                 xgb_preds = xgb_model.predict(future_features)
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 logger.warning(
                     "personalized_xgboost_fold_failed",
                     shopkeeper_id=shopkeeper_id, product_code=product_code, error=str(exc),

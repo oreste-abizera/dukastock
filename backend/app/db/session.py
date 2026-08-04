@@ -5,11 +5,12 @@ Production uses Supabase (managed PostgreSQL). For local development and
 unit testing, DATABASE_URL can point at a local SQLite file so the full
 stack runs without any external dependency.
 """
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 # pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session, sessionmaker
 

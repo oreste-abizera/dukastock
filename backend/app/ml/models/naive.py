@@ -20,7 +20,7 @@ class NaiveBaseline:
     def __init__(self):
         self.history: pd.Series | None = None
 
-    def fit(self, y: pd.Series) -> "NaiveBaseline":
+    def fit(self, y: pd.Series) -> NaiveBaseline:
         self.history = y.reset_index(drop=True)
         return self
 

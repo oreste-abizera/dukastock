@@ -32,10 +32,10 @@ class NBEATSModel:
         self.horizon = horizon
         self.input_size = input_size
         self.max_steps = max_steps
-        self.nf: "NeuralForecast | None" = None
+        self.nf: NeuralForecast | None = None
         self._fallback_mean = 0.0
 
-    def fit(self, dates: pd.Series, y: pd.Series) -> "NBEATSModel":
+    def fit(self, dates: pd.Series, y: pd.Series) -> NBEATSModel:
         self._fallback_mean = float(y.mean()) if len(y) else 0.0
         n = len(y)
         # N-BEATS needs enough history to form at least one input window;

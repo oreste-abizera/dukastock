@@ -12,6 +12,7 @@ from functools import lru_cache
 
 # pyrefly: ignore [missing-import]
 from pydantic import field_validator
+
 # pyrefly: ignore [missing-import]
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -88,7 +89,7 @@ class Settings(BaseSettings):
             return "postgresql://" + v[len("postgres://"):]
         return v
 
-    def model_post_init(self, __context: object) -> None:
+    def model_post_init(self, __context: object, /) -> None:
         if not self.ner_model_dir:
             object.__setattr__(self, "ner_model_dir", _default_ner_model_dir())
         if (

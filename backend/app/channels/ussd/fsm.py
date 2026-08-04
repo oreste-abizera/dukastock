@@ -16,18 +16,26 @@ shopkeeper is mid-transaction on across those stateless round-trips within
 the 180-second MTN/Airtel timeout window.
 """
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
-from app.channels.messages import forecast_message, recent_sales_message, sale_logged_message
+from app.channels.messages import (
+    forecast_message,
+    recent_sales_message,
+    sale_logged_message,
+)
 from app.core.config import get_settings
 from app.db.redis_client import clear_ussd_session, load_ussd_session, save_ussd_session
 from app.models.orm import ChannelEnum, LocaleEnum, USSDSession
 from app.services.forecast_service import ForecastService
-from app.services.sales_service import get_or_create_shopkeeper, get_recent_sales, record_sale
+from app.services.sales_service import (
+    get_or_create_shopkeeper,
+    get_recent_sales,
+    record_sale,
+)
 
 settings = get_settings()
 _forecast_service = ForecastService()
@@ -45,7 +53,7 @@ def _persist_ussd_session_record(db: Session, session_id: str, shopkeeper_id: st
         db.add(USSDSession(session_id=session_id, shopkeeper_id=shopkeeper_id, state=state))
     else:
         record.state = state
-        record.last_active = datetime.utcnow()
+        record.last_active = datetime.now(tz=UTC)
     db.commit()
 
 

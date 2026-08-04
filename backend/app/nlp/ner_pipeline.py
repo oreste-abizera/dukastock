@@ -93,7 +93,7 @@ class CommerceNERPipeline:
                 aggregation_strategy="simple",
             )
             logger.info("xlmr_model_loaded", path=str(self.model_dir))
-        except Exception as exc:  # pragma: no cover - defensive load guard
+        except Exception as exc:  # noqa: BLE001  # pragma: no cover - defensive load guard
             logger.warning("xlmr_load_failed", error=str(exc))
             self._xlmr_pipeline = None
 

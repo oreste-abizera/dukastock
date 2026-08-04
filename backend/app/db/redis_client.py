@@ -10,7 +10,7 @@ same moment the telecom session would have expired anyway, so there's
 nothing to garbage-collect.
 """
 import json
-from typing import Any, Optional
+from typing import Any
 
 # pyrefly: ignore [missing-import]
 import redis
@@ -19,7 +19,7 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
-_redis_client: Optional[redis.Redis] = None
+_redis_client: redis.Redis | None = None
 
 
 def get_redis() -> redis.Redis:
@@ -38,7 +38,7 @@ def save_ussd_session(session_id: str, state: dict[str, Any]) -> None:
     )
 
 
-def load_ussd_session(session_id: str) -> Optional[dict[str, Any]]:
+def load_ussd_session(session_id: str) -> dict[str, Any] | None:
     client = get_redis()
     raw = client.get(f"ussd:session:{session_id}")
     if raw is None:

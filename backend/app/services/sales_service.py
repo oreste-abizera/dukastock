@@ -7,10 +7,11 @@ selection — see proposal's Use Case Diagram note: "WhatsApp input routes
 through the NLP parser while USSD input routes through the FSM menu
 directly to the sales log without NLP processing").
 """
-from datetime import datetime
+from datetime import UTC, datetime
 
 # pyrefly: ignore [missing-import]
 from sqlalchemy.exc import IntegrityError
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -63,7 +64,7 @@ def record_sale(
         quantity=quantity,
         unit=unit,
         channel=channel,
-        logged_at=datetime.utcnow(),
+        logged_at=datetime.now(tz=UTC),
     )
     db.add(log)
     db.commit()

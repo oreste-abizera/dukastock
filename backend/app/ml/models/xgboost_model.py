@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+
 # pyrefly: ignore [missing-import]
 import xgboost as xgb
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
@@ -95,16 +96,16 @@ class XGBoostDemandModel:
     def __init__(self, use_grid_search: bool = True, param_grid: dict | None = None, **xgb_kwargs):
         self.use_grid_search = use_grid_search
         self.param_grid = param_grid or DEFAULT_PARAM_GRID
-        self._fixed_kwargs = dict(
-            n_estimators=200, max_depth=4, learning_rate=0.05,
-            subsample=0.8, colsample_bytree=0.8, objective="reg:squarederror",
-        )
+        self._fixed_kwargs = {
+            "n_estimators": 200, "max_depth": 4, "learning_rate": 0.05,
+            "subsample": 0.8, "colsample_bytree": 0.8, "objective": "reg:squarederror",
+        }
         self._fixed_kwargs.update(xgb_kwargs)
         self.model = None
         self.best_params_: dict | None = None
         self._fallback_mean = 0.0
 
-    def fit(self, df_features: pd.DataFrame, target_col: str = "sales") -> "XGBoostDemandModel":
+    def fit(self, df_features: pd.DataFrame, target_col: str = "sales") -> XGBoostDemandModel:
         df = add_lag_features(df_features, target_col)
         df = df.dropna(subset=FEATURE_COLUMNS + [target_col])
         self._fallback_mean = float(df_features[target_col].mean()) if len(df_features) else 0.0

@@ -26,7 +26,7 @@ def hash_phone_number(raw_phone: str) -> str:
     """
     settings = get_settings()
     normalized = _normalize_phone(raw_phone)
-    salted = f"{settings.phone_hash_salt}:{normalized}".encode("utf-8")
+    salted = f"{settings.phone_hash_salt}:{normalized}".encode()
     digest = hashlib.sha256(salted).hexdigest()
     # Fold the SHA-256 digest into a UUID5 for a stable, storage-friendly shape.
     return str(uuid.uuid5(uuid.NAMESPACE_OID, digest))

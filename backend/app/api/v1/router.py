@@ -12,10 +12,13 @@ from __future__ import annotations
 
 # pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, Form
+
 # pyrefly: ignore [missing-import]
 from fastapi.responses import PlainTextResponse
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -39,7 +42,7 @@ def health_check():
 def whatsapp_webhook(
     From: str = Form(...),
     Body: str = Form(...),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db),  # noqa: B008
 ):
     twiml = handle_whatsapp_message(db, from_number=From, body=Body)
     return PlainTextResponse(content=twiml, media_type="application/xml")
@@ -52,7 +55,7 @@ def ussd_webhook(
     text: str = Form(""),
     serviceCode: str = Form(""),   # Africa's Talking also sends these; accept
     networkCode: str = Form(""),   # them to avoid 422 on real AT webhooks
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db),  # noqa: B008
 ):
     response = handle_ussd_request(db, session_id=sessionId, phone_number=phoneNumber, text=text)
     return PlainTextResponse(content=response.render())
@@ -77,7 +80,7 @@ class SaleCreate(BaseModel):
 
 
 @router.post("/sales")
-def post_sale(sale: SaleCreate, db: Session = Depends(get_db)):
+def post_sale(sale: SaleCreate, db: Session = Depends(get_db)):  # noqa: B008
     # phone_number arrives in the JSON body, never the URL, so it never
     # lands in access logs before sales_service hashes it.
     log = record_sale(

@@ -41,6 +41,6 @@ def send_sms(client, to_number: str, message: str) -> dict:
     try:
         response = client.SMS.send(message, [to_number], sender_id=settings.at_sender_id)
         return {"status": "sent", "raw": response}
-    except Exception as exc:  # pragma: no cover - network dependent
+    except Exception as exc:  # noqa: BLE001  # pragma: no cover - network dependent
         logger.error("sms_send_failed", error=str(exc), to=to_number)
         return {"status": "failed", "error": str(exc)}
