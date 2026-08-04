@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
 from app.channels.messages import forecast_message, recent_sales_message, sale_logged_message

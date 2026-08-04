@@ -12,6 +12,7 @@ nothing to garbage-collect.
 import json
 from typing import Any, Optional
 
+# pyrefly: ignore [missing-import]
 import redis
 
 from app.core.config import get_settings

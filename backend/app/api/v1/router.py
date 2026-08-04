@@ -10,9 +10,13 @@ Five endpoints, matching the channels and use cases in the proposal:
 """
 from __future__ import annotations
 
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, Form
+# pyrefly: ignore [missing-import]
 from fastapi.responses import PlainTextResponse
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
 from app.channels.ussd.fsm import handle_ussd_request

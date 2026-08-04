@@ -10,7 +10,9 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 
+# pyrefly: ignore [missing-import]
 from pydantic import field_validator
+# pyrefly: ignore [missing-import]
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

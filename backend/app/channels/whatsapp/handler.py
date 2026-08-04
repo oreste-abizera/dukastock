@@ -8,7 +8,9 @@ Sequence Diagram exactly: Duka Operator -> Twilio webhook -> FastAPI ->
 NLP Parser -> Supabase -> Forecasting Service -> Kinyarwanda response ->
 Twilio -> Duka Operator.
 """
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
+# pyrefly: ignore [missing-import]
 from twilio.twiml.messaging_response import MessagingResponse
 
 from app.channels.messages import sale_logged_message, sale_not_understood_message

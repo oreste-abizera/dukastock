@@ -24,6 +24,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+# pyrefly: ignore [missing-import]
 from rapidfuzz import fuzz, process
 
 from app.core.config import get_settings
@@ -83,6 +84,7 @@ class CommerceNERPipeline:
             logger.info("xlmr_model_not_found_using_fallback_only", path=str(self.model_dir))
             return
         try:
+            # pyrefly: ignore [missing-import]
             from transformers import pipeline
             self._xlmr_pipeline = pipeline(
                 "token-classification",

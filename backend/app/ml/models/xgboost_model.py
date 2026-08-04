@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+# pyrefly: ignore [missing-import]
 import xgboost as xgb
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 

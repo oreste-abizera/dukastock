@@ -10,6 +10,7 @@ shorter series with clear seasonal structure.
 """
 import numpy as np
 import pandas as pd
+# pyrefly: ignore [missing-import]
 import pmdarima as pm
 
 

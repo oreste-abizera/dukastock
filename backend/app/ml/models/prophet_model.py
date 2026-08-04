@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+# pyrefly: ignore [missing-import]
 from prophet import Prophet
 
 from app.ml.pipeline.rwanda_features import build_holiday_set

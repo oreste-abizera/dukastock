@@ -8,7 +8,9 @@ stack runs without any external dependency.
 from contextlib import contextmanager
 from typing import Generator
 
+# pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import get_settings

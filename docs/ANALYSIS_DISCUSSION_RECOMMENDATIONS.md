@@ -6,26 +6,39 @@
 
 Two hundred real messages were collected directly from Duka shopkeepers
 (`ml_experiments/data/Kinyarwanda Shopkeeper Dataset.xlsx`, plain-text
-extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`) and
-entity-span annotation (PRODUCT/QUANTITY/UNIT) is underway in Doccano per
-`docs/ANNOTATION_GUIDE.md` — 26 of 200 messages (13%) fully labeled as of
-this report. The resulting precision/recall/F1/Cohen's Kappa comparison
-against RapidFuzz on the completed real set is the one research result
-not yet available.
+extract at `ml_experiments/data/shopkeeper_messages_for_doccano.txt`).
+Entity-span annotation (PRODUCT/QUANTITY/UNIT) is complete for 183 of 200
+messages (91.5%) per `docs/ANNOTATION_GUIDE.md`. XLM-R was fine-tuned on
+the real annotated set (146 train / 37 eval, 15 epochs, CPU-only —
+MPS ran out of memory during the optimizer step on 278M parameters) and
+scored against RapidFuzz:
 
-What has been demonstrated is that the full pipeline works correctly
-end-to-end: XLM-R was fine-tuned (on the synthetic placeholder set, since
-real annotations aren't ready yet), deployed to production, and verified
-live against a real WhatsApp message — correctly extracting two separate
-product/quantity/unit triples from a single code-switched sentence
-("Nabagurishije isukari ibiro bitatu namavuta litre imwe" → SUGAR 3 kg
-and OIL 1 litre), something the RapidFuzz baseline is architecturally
-incapable of by design (it only ever returns one product per message).
-This confirms the training → serialization → serving → channel-delivery
-chain is sound; what remains is re-running that same, already-verified
-pipeline against the real annotated set once it exists.
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| XLM-R (fine-tuned) | 0.953 | 0.965 | 0.959 |
+| RapidFuzz (baseline) | 1.000 | 0.378 | 0.549 |
 
-### RQ2 — Cold-start density thresholds (forecasting, secondary)
+Cohen's Kappa on a 50-message subset independently labeled by two
+annotators: 0.951 ("almost perfect," Landis & Koch, 1977). RapidFuzz's
+recall failure is not a tuning artifact — it is architectural: it returns
+at most one product per message and has no mechanism to disambiguate
+which numeral in a sentence is the quantity versus, e.g., a price. XLM-R
+correctly extracts two separate product/quantity/unit triples from a
+single code-switched sentence ("Nabagurishije isukari ibiro bitatu
+namavuta litre imwe" → SUGAR 3 kg and OIL 1 litre), something RapidFuzz
+cannot do by design. The 37-message eval set is small; treat the exact
+F1 as a point estimate on this domain and corpus, not a claim that
+generalizes to arbitrary Kinyarwanda commerce text without further
+validation.
+
+### RQ2 — Cold-start density thresholds (forecasting; dropped from the final report's scope)
+
+**Note (2026-07-19): this research question was removed from the final
+capstone report once RQ1 reached a complete real result.** The analysis
+below remains accurate to the code and is kept here as engineering
+documentation, but it is not presented or defended in the thesis.
+
+
 
 The density × model benchmark (`ml_experiments/results/ml_benchmark_results.csv`,
 walk-forward cross-validation with a Newey-West-corrected Diebold-Mariano
@@ -61,10 +74,7 @@ with calendar/holiday features), not real Duka transaction data — this
 limitation is disclosed in full in `docs/RESEARCH_DESIGN.md` and was a
 deliberate, reasoned scope decision given the impracticality of
 collecting multi-year real transaction histories from informal retailers
-within the project timeline, not an oversight. Despite being secondary,
-this is currently the project's most complete, fully-evaluated result —
-worth stating plainly alongside RQ1's still-pending real-data result
-above, rather than letting the primary/secondary labels imply otherwise.
+within the project timeline, not an oversight.
 
 ### RQ3 — SUS usability
 

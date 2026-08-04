@@ -7,6 +7,7 @@ log aggregation) and as human-readable console output in development.
 import logging
 import sys
 
+# pyrefly: ignore [missing-import]
 import structlog
 
 from app.core.config import get_settings

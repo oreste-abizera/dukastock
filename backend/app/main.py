@@ -5,7 +5,9 @@ A single backend serves all three channels (WhatsApp, USSD, SMS) through
 one shared forecasting pipeline, per the proposal's modular,
 channel-agnostic architecture (Chapter 3.3).
 """
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import router as v1_router

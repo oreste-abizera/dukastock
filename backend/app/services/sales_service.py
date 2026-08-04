@@ -9,7 +9,9 @@ directly to the sales log without NLP processing").
 """
 from datetime import datetime
 
+# pyrefly: ignore [missing-import]
 from sqlalchemy.exc import IntegrityError
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_phone_number

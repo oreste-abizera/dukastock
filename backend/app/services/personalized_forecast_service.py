@@ -21,6 +21,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
 from app.core.logging import get_logger

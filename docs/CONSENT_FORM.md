@@ -24,9 +24,9 @@ it does not get entered into the DukaStock database.
 
 ## English version
 
-**Study title:** DukaStock — Benchmarking FMCG Demand Forecasting Under
-Data Scarcity for Informal Rwandan Micro-Retail, with WhatsApp and USSD
-Delivery
+**Study title:** DukaStock — A Kinyarwanda-English Commerce Message
+Understanding System for Informal Rwandan Micro-Retail, Delivered via
+WhatsApp and USSD
 
 **Researcher:** Oreste Abizera, BSc. Software Engineering capstone,
 African Leadership University
@@ -35,11 +35,12 @@ African Leadership University
 
 ### What this study is about
 
-I am a student researcher studying whether a computer system can help
-shopkeepers like you predict how much sugar, cooking oil, flour, rice, or
-soap you might sell next week, and whether that prediction can reach you
-through WhatsApp or through a simple phone menu (USSD) — the kind that
-works on any phone, not just a smartphone.
+I am a student researcher studying whether a computer system can
+understand a short message about a sale — written the way you would
+actually type it, mixing Kinyarwanda and English — and correctly record
+what was sold, how much, and in what unit. I am also studying whether
+that same system can reach you through WhatsApp or through a simple phone
+menu (USSD) — the kind that works on any phone, not just a smartphone.
 
 ### What I am asking you to do
 
@@ -112,9 +113,9 @@ Witness signature: _______________________________
 
 ## Verisiyo y'Ikinyarwanda
 
-**Umutwe w'ubushakashatsi:** DukaStock — Kugereranya uburyo bwo guteganya
-ibicuruzwa (FMCG) mu bihe habura amakuru, ku baguzi bato batemewe by'umwuga
-(Duka) mu Rwanda, hifashishijwe WhatsApp na USSD
+**Umutwe w'ubushakashatsi:** DukaStock — Sisitemu isobanukirwa ubutumwa
+bw'ubucuruzi mu kinyarwanda n'icyongereza, ku baguzi bato batemewe
+by'umwuga (Duka) mu Rwanda, hifashishijwe WhatsApp na USSD
 
 **Umushakashatsi:** Oreste Abizera, umunyeshuri wa BSc. muri Software
 Engineering, muri African Leadership University
@@ -124,11 +125,12 @@ Engineering, muri African Leadership University
 ### Icyo ubu bushakashatsi bugamije
 
 Ndi umunyeshuri ukora ubushakashatsi ku kama sisitemu ya mudasobwa
-ishobora gufasha abacuruzi nkawe guteganya umubare w'isukari, amavuta yo
-guteka, ifu, umuceri, cyangwa isabune ushobora kugurisha mu cyumweru
-gitaha, no kureba niba iyo mibare ishobora kukugeraho binyuze kuri
-WhatsApp cyangwa binyuze ku ipaji nyoroshye ya telefoni (USSD) — ubwoko
-bukora kuri telefoni iyo ari yo yose, ntabwo ari smartphone gusa.
+ishobora gusobanukirwa ubutumwa bugufi bwerekeye igurisha — wanditse mu
+buryo nyabwo, uvanga Ikinyarwanda n'Icyongereza — kandi ikandika neza
+icyagurishijwe, umubare, n'igipimo. Ndashaka no kureba niba iyo sisitemu
+ishobora kukugeraho binyuze kuri WhatsApp cyangwa binyuze ku ipaji
+nyoroshye ya telefoni (USSD) — ubwoko bukora kuri telefoni iyo ari yo
+yose, ntabwo ari smartphone gusa.
 
 ### Ibyo ndagusaba
 

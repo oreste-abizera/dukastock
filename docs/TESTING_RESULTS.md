@@ -82,15 +82,19 @@ service code end to end:
 
 ![Swagger UI at https://api.dukastock.oreste.dev/docs listing all 5 API endpoints (health, WhatsApp webhook, USSD webhook, forecast, sales) and their schemas](screenshots/swagger_ui.jpeg)
 
-### 1.4 Real NER annotation in progress (RQ2 data collection)
+### 1.4 Real NER annotation (RQ1 data collection)
 
-200 real messages were collected directly from Duka shopkeepers and are
-being annotated span-by-span (PRODUCT/QUANTITY/UNIT) in Doccano, running
-locally per `docs/ANNOTATION_GUIDE.md`:
+200 real messages were collected directly from Duka shopkeepers and
+annotated span-by-span (PRODUCT/QUANTITY/UNIT) in Doccano, running
+locally per `docs/ANNOTATION_GUIDE.md`. **As of 2026-07-19, 183 of 200
+(91.5%) are complete** — the screenshots below are from the 2026-07-06
+session and show 26/200 (13%); they are kept for the annotation-editor UI
+reference but the progress number in them is stale. Recapture before
+final submission if an up-to-date progress screenshot is needed.
 
 ![Doccano dataset view: the 200 real collected messages imported, with several already marked Finished](screenshots/doccano_dataset_progress.png)
 
-![Doccano annotation editor: message 1 of 200 with PRODUCT/QUANTITY/UNIT spans labeled, and the Progress panel showing 26 of 200 messages (13%) completed so far](screenshots/doccano_annotation_editor.png)
+![Doccano annotation editor: message 1 of 200 with PRODUCT/QUANTITY/UNIT spans labeled — progress panel shown is from 2026-07-06 (26/200, 13%); real progress as of 2026-07-19 is 183/200 (91.5%)](screenshots/doccano_annotation_editor.png)
 
 ---
 
@@ -159,7 +163,7 @@ request for a product with no trained model returns an explicit
 
 | Environment | Where used | What ran there |
 |---|---|---|
-| macOS + Apple Silicon (MPS GPU) | Local development machine | XLM-R fine-tuning (10 epochs, 200-message set, in **~7.5 minutes** via MPS acceleration) |
+| macOS + Apple Silicon, CPU-only | Local development machine | XLM-R fine-tuning (15 epochs, 183-message annotated set, 146/37 train/eval split, in **~18.2 minutes**) — MPS was disabled for this run because XLM-R's 278M parameters exhaust unified memory during the AdamW optimizer step; an earlier 10-epoch/~7.5-minute run on synthetic placeholder data used MPS successfully, but that number does not describe the final real-data training run |
 | Linux VPS + CPU only | Coolify production container | XLM-R inference at request time (confirmed via production logs: `Device set to use cpu`) — same model artifact, different hardware, both verified working |
 | SQLite | Local dev + automated test suite | All 97 tests run against an isolated in-memory/file SQLite DB |
 | PostgreSQL | Coolify production | Real Postgres resource, Alembic migrations verified running against it live |

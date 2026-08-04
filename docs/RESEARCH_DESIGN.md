@@ -12,16 +12,25 @@ messages compared to a rule-based RapidFuzz baseline, measured by
 precision, recall, and F1 on a 200-message annotated test set with
 reported Cohen's Kappa?
 
-**Status as of this report**: data collection is complete (200 real
-messages collected directly from Duka shopkeepers). Entity-span
-annotation in Doccano is in progress (26/200, 13%, as of 2026-07-06). The
-full precision/recall/F1/Cohen's Kappa result on the real annotated set is
-pending completion of annotation; this section will be updated once
-available. The pipeline itself (fine-tuning, serialization, serving, live
-WhatsApp delivery) is already verified working end-to-end, on the
-synthetic placeholder set, ahead of the real result.
+**Status as of this report (2026-07-19)**: data collection and entity-span
+annotation are both complete — 183 of 200 collected messages annotated in
+Doccano (91.5%). XLM-R was fine-tuned on the real annotated set (146
+train / 37 eval split, 15 epochs, ~18.2 minutes on CPU — MPS ran out of
+unified memory during the AdamW optimizer step on XLM-R's 278M
+parameters, so training ran CPU-only) and evaluated against the RapidFuzz
+baseline:
 
-## Secondary research question
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| XLM-R (fine-tuned) | 0.953 | 0.965 | 0.959 |
+| RapidFuzz (baseline) | 1.000 | 0.378 | 0.549 |
+
+Cohen's Kappa (real inter-annotator agreement, 50-message subset, two
+independent annotators): **0.951** ("almost perfect" per Landis & Koch,
+1977). Full detail in `ml_experiments/notebooks/03_xlmr_commerce_ner.ipynb`
+and `ml_experiments/results/`.
+
+## Secondary research question (out of scope for the final capstone report)
 
 Across SARIMA, Prophet, XGBoost, and N-BEATS, at what minimum data density
 does each model class first achieve statistically significant improvement
@@ -29,6 +38,15 @@ over a naive last-week-sales baseline (p < 0.05, Diebold-Mariano test with
 Newey-West HAC variance correction for h = 7), evaluated at the individual
 store (single-Duka proxy) level, when trained under simulated cold-start
 conditions on a Rwanda-localized formal retail benchmark dataset?
+
+**This question was dropped from the final report's scope** (decision
+dated 2026-07-19, once the primary NLP question reached a complete real
+result). The forecasting pipeline, models, and benchmark code described
+below remain implemented and working in this repository — nothing was
+deleted — but the final capstone report is scoped to the NLP question
+only, so no forecasting result is presented or defended there. Everything
+under this heading is retained purely as engineering documentation for the
+codebase, not as thesis content.
 
 ## Tertiary research question
 

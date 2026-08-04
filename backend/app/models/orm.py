@@ -13,8 +13,11 @@ import enum
 import uuid
 from datetime import datetime
 
+# pyrefly: ignore [missing-import]
 from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, String
+# pyrefly: ignore [missing-import]
 from sqlalchemy.dialects.postgresql import UUID
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()

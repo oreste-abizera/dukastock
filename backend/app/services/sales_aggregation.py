@@ -12,6 +12,7 @@ engineering (app.ml.pipeline.rwanda_features) and evaluation
 from __future__ import annotations
 
 import pandas as pd
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
 from app.models.orm import SalesLog
